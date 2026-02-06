@@ -1,0 +1,18 @@
+"use client";
+
+import React from "react";
+import { CartProvider } from "../context/CartContext";
+import NavBar from "./NavBar";
+import Footer from "./Footer";
+
+export default function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <CartProvider>
+      <NavBar />
+      <main className="min-h-screen bg-slate-100">
+        <div className="mx-auto max-w-5xl p-6">{children}</div>
+      </main>
+      <Footer />
+    </CartProvider>
+  );
+}

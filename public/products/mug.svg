@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="mugGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e11d48;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#be123c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="#ffffff"/>
+  <!-- Mug body -->
+  <rect x="50" y="60" width="80" height="80" rx="8" fill="url(#mugGrad)" stroke="#831843" stroke-width="1.5"/>
+  <!-- Mug rim -->
+  <ellipse cx="90" cy="60" rx="40" ry="12" fill="#be123c" opacity="0.8"/>
+  <!-- Coffee inside -->
+  <ellipse cx="90" cy="65" rx="36" ry="10" fill="#78350f" opacity="0.7"/>
+  <!-- Mug handle -->
+  <path d="M 130 80 Q 160 80 160 110 Q 160 130 130 130" fill="none" stroke="url(#mugGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Handle outline -->
+  <path d="M 130 80 Q 160 80 160 110 Q 160 130 130 130" fill="none" stroke="#831843" stroke-width="1.5"/>
+  <!-- Shine/highlight -->
+  <ellipse cx="65" cy="80" rx="8" ry="15" fill="#fff" opacity="0.3"/>
+</svg>

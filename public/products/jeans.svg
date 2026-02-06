@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="jeansGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0c4a6e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="#f3f4f6"/>
+  <!-- Left pant leg -->
+  <path d="M 70 50 L 65 180 L 85 180 L 90 50 Z" fill="url(#jeansGrad)" stroke="#082f49" stroke-width="1"/>
+  <!-- Right pant leg -->
+  <path d="M 110 50 L 115 180 L 135 180 L 130 50 Z" fill="url(#jeansGrad)" stroke="#082f49" stroke-width="1"/>
+  <!-- Waistband -->
+  <ellipse cx="100" cy="50" rx="30" ry="8" fill="#1e1b4b"/>
+  <!-- Belt loops -->
+  <rect x="68" y="50" width="4" height="25" fill="#0c4a6e"/>
+  <rect x="128" y="50" width="4" height="25" fill="#0c4a6e"/>
+  <!-- Zipper -->
+  <line x1="100" y1="55" x2="100" y2="75" stroke="#fbbf24" stroke-width="1.5"/>
+  <!-- Stitching details -->
+  <path d="M 70 60 L 70 170" stroke="#f5d547" stroke-width="0.8" opacity="0.6"/>
+  <path d="M 130 60 L 130 170" stroke="#f5d547" stroke-width="0.8" opacity="0.6"/>
+</svg>

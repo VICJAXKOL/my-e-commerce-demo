@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="bottleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="#f0f9fa"/>
+  <!-- Bottle neck -->
+  <path d="M 85 40 L 80 65 L 120 65 L 115 40 Z" fill="url(#bottleGrad)" stroke="#0e7490" stroke-width="1"/>
+  <!-- Cap/lid -->
+  <rect x="82" y="30" width="36" height="12" rx="2" fill="#1e293b" stroke="#0f172a" stroke-width="1"/>
+  <!-- Bottle body -->
+  <path d="M 80 65 Q 60 100 65 150 Q 70 160 100 165 Q 130 160 135 150 Q 140 100 120 65 Z" fill="url(#bottleGrad)" stroke="#0e7490" stroke-width="1"/>
+  <!-- Water inside -->
+  <path d="M 82 100 Q 65 120 68 150 Q 72 158 100 162 Q 128 158 132 150 Q 135 120 118 100 Z" fill="#67e8f9" opacity="0.4"/>
+  <!-- Bottle shine -->
+  <ellipse cx="75" cy="80" rx="8" ry="25" fill="#fff" opacity="0.3"/>
+  <!-- Condensation drops -->
+  <circle cx="115" cy="95" r="2" fill="#fff" opacity="0.5"/>
+  <circle cx="120" cy="115" r="2" fill="#fff" opacity="0.5"/>
+</svg>
