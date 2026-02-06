@@ -3,7 +3,7 @@ import { products } from "../../lib/products";
 import ProductCard from "../../components/ProductCard";
 
 export default function CategoriesPage() {
-  const categories = ["Apparel", "Footwear", "Home"] as const;
+  const categories = ["Apparel", "Footwear", "Home", "Electronics", "Sports & Fitness", "Beauty & Personal Care", "Accessories", "Books & Entertainment"] as const;
 
   return (
     <div className="mx-auto max-w-5xl">

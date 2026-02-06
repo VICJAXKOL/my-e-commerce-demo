@@ -47,6 +47,11 @@ export function SearchAndFilter() {
             <option>Apparel</option>
             <option>Footwear</option>
             <option>Home</option>
+            <option>Electronics</option>
+            <option>Sports & Fitness</option>
+            <option>Beauty & Personal Care</option>
+            <option>Accessories</option>
+            <option>Books & Entertainment</option>
           </select>
         </div>
 

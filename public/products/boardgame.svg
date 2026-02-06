@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fafaf9"/>
+  <!-- Game board base (colored squares) -->
+  <rect x="50" y="50" width="20" height="20" fill="#f87171"/>
+  <rect x="70" y="50" width="20" height="20" fill="#60a5fa"/>
+  <rect x="90" y="50" width="20" height="20" fill="#fbbf24"/>
+  <rect x="110" y="50" width="20" height="20" fill="#34d399"/>
+  
+  <rect x="50" y="70" width="20" height="20" fill="#60a5fa"/>
+  <rect x="70" y="70" width="20" height="20" fill="#a78bfa"/>
+  <rect x="90" y="70" width="20" height="20" fill="#f87171"/>
+  <rect x="110" y="70" width="20" height="20" fill="#fbbf24"/>
+  
+  <rect x="50" y="90" width="20" height="20" fill="#fbbf24"/>
+  <rect x="70" y="90" width="20" height="20" fill="#34d399"/>
+  <rect x="90" y="90" width="20" height="20" fill="#60a5fa"/>
+  <rect x="110" y="90" width="20" height="20" fill="#a78bfa"/>
+  
+  <rect x="50" y="110" width="20" height="20" fill="#34d399"/>
+  <rect x="70" y="110" width="20" height="20" fill="#f87171"/>
+  <rect x="90" y="110" width="20" height="20" fill="#a78bfa"/>
+  <rect x="110" y="110" width="20" height="20" fill="#60a5fa"/>
+  
+  <!-- Game pieces -->
+  <circle cx="60" cy="140" r="6" fill="#1f2937" stroke="#000" stroke-width="1"/>
+  <circle cx="85" cy="142" r="6" fill="#fff" stroke="#000" stroke-width="1"/>
+  <circle cx="110" cy="140" r="6" fill="#dc2626" stroke="#000" stroke-width="1"/>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fff7ed"/>
+  <!-- Notebook cover -->
+  <rect x="50" y="40" width="100" height="130" rx="4" fill="#78350f" stroke="#5a2d0c" stroke-width="1.5"/>
+  <!-- Cover design -->
+  <rect x="60" y="55" width="80" height="15" fill="#b45309" opacity="0.6"/>
+  <text x="100" y="67" font-size="10" text-anchor="middle" fill="#fff" font-weight="bold">NOTES</text>
+  <!-- Pages stack -->
+  <rect x="53" y="43" width="94" height="4" fill="#f5deb3" opacity="0.8"/>
+  <rect x="56" y="47" width="88" height="4" fill="#f5deb3" opacity="0.6"/>
+  <!-- Spiral binding -->
+  <line x1="58" y1="50" x2="58" y2="165" stroke="#8b4513" stroke-width="2"/>
+  <!-- Page lines -->
+  <line x1="70" y1="90" x2="130" y2="90" stroke="#d4a574" stroke-width="0.5"/>
+  <line x1="70" y1="100" x2="130" y2="100" stroke="#d4a574" stroke-width="0.5"/>
+  <line x1="70" y1="110" x2="130" y2="110" stroke="#d4a574" stroke-width="0.5"/>
+</svg>

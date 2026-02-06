@@ -7,6 +7,9 @@ export default function Home() {
   const apparelProducts = getProductsByCategory("Apparel");
   const footwearProducts = getProductsByCategory("Footwear");
   const homeProducts = getProductsByCategory("Home");
+  const electronicsProducts = getProductsByCategory("Electronics");
+  const sportsProducts = getProductsByCategory("Sports & Fitness");
+  const beautyProducts = getProductsByCategory("Beauty & Personal Care");
 
   return (
     <main className="mx-auto max-w-5xl">
@@ -59,6 +62,39 @@ export default function Home() {
         <h2 className="mb-4 text-2xl font-semibold">Home & Living</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {homeProducts.slice(0, 4).map((p) => (
+            <div key={p.id}>
+              <ProductCard product={p} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="mb-4 text-2xl font-semibold">Electronics</h2>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {electronicsProducts.slice(0, 4).map((p) => (
+            <div key={p.id}>
+              <ProductCard product={p} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="mb-4 text-2xl font-semibold">Sports & Fitness</h2>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {sportsProducts.slice(0, 4).map((p) => (
+            <div key={p.id}>
+              <ProductCard product={p} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="mb-4 text-2xl font-semibold">Beauty & Personal Care</h2>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {beautyProducts.slice(0, 4).map((p) => (
             <div key={p.id}>
               <ProductCard product={p} />
             </div>

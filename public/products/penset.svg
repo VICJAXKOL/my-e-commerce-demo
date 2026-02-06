@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fafafa"/>
+  <!-- Pen 1 (red) -->
+  <rect x="40" y="60" width="8" height="70" rx="4" fill="#dc2626" stroke="#991b1b" stroke-width="0.5"/>
+  <ellipse cx="44" cy="125" rx="4" ry="6" fill="#9333ea"/>
+  <!-- Pen 2 (blue) -->
+  <rect x="60" y="50" width="8" height="80" rx="4" fill="#2563eb" stroke="#1e40af" stroke-width="0.5"/>
+  <ellipse cx="64" cy="125" rx="4" ry="6" fill="#9333ea"/>
+  <!-- Pen 3 (black) -->
+  <rect x="80" y="55" width="8" height="75" rx="4" fill="#1f2937" stroke="#111827" stroke-width="0.5"/>
+  <ellipse cx="84" cy="125" rx="4" ry="6" fill="#9333ea"/>
+  <!-- Pen 4 (green) -->
+  <rect x="100" y="58" width="8" height="72" rx="4" fill="#16a34a" stroke="#15803d" stroke-width="0.5"/>
+  <ellipse cx="104" cy="125" rx="4" ry="6" fill="#9333ea"/>
+  <!-- Pen 5 (purple) -->
+  <rect x="120" y="52" width="8" height="78" rx="4" fill="#9333ea" stroke="#7e22ce" stroke-width="0.5"/>
+  <ellipse cx="124" cy="125" rx="4" ry="6" fill="#9333ea"/>
+  <!-- Box -->
+  <rect x="30" y="140" width="110" height="30" rx="2" fill="#e5e7eb" stroke="#d1d5db" stroke-width="1"/>
+</svg>
