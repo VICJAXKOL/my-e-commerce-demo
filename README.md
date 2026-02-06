@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My E-Commerce Demo
 
-## Getting Started
+A modern, feature-rich e-commerce application built with Next.js, React, and Tailwind CSS. Browse products across 8 categories, add items to cart, and checkout seamlessly.
 
-First, run the development server:
+## 🚀 Live Demo
+
+**[View on Vercel](https://my-e-commerce-demo-vicjaxkol.vercel.app)**
+
+## ✨ Features
+
+- **8 Product Categories**: Apparel, Footwear, Home & Living, Electronics, Sports & Fitness, Beauty & Personal Care, Accessories, and Books & Entertainment
+- **32 Unique Products**: Comprehensive catalog with pricing, ratings, reviews, and stock levels
+- **Shopping Cart**: Add/remove items, adjust quantities, persisted cart state via Context API
+- **Product Discovery**: Search, filter by category, and sort products
+- **Dynamic Product Pages**: Individual product detail pages with related products
+- **Responsive Design**: Mobile-first layout using Tailwind CSS
+- **User-Friendly Navigation**: Multi-page app with breadcrumbs and intuitive routing
+
+## 📋 Pages
+
+- **Home** (`/`) - Featured products by category
+- **Products** (`/products`) - Browse all products with search & filter
+- **Product Detail** (`/products/[id]`) - Individual product page
+- **Categories** (`/categories`) - Browse by category
+- **Cart** (`/cart`) - View and manage cart items
+- **Checkout** (`/checkout`) - Review order
+- **Confirmation** (`/confirmation`) - Order confirmation
+- **About, Contact, FAQ, Returns** - Informational pages
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 16.1.6 with App Router
+- **UI**: React 19.2.3
+- **Styling**: Tailwind CSS 4
+- **State**: React Context API (Cart management)
+- **Language**: TypeScript 5
+- **Images**: SVG assets in `/public/products`
+
+## 📦 Installation
+
+### Prerequisites
+- Node.js 18+ and npm
+
+### Quick Start
 
 ```bash
+# Clone the repository
+git clone https://github.com/VICJAXKOL/my-e-commerce-demo.git
+cd my-e-commerce-demo
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🏗️ Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+my-react-app/
+├── app/                          # Next.js App Router pages
+│   ├── page.tsx                  # Home page
+│   ├── layout.tsx                # Root layout
+│   ├── products/
+│   │   ├── page.tsx              # Products listing
+│   │   └── [id]/page.tsx         # Product detail
+│   ├── categories/page.tsx       # Categories page
+│   ├── cart/page.tsx             # Shopping cart
+│   ├── checkout/page.tsx         # Checkout
+│   └── ...other pages
+├── components/                   # Reusable React components
+│   ├── ProductCard.tsx
+│   ├── SearchAndFilter.tsx
+│   ├── CartClient.tsx
+│   ├── NavBar.tsx
+│   └── ...more components
+├── context/                      # React Context API
+│   └── CartContext.tsx           # Cart state management
+├── lib/                          # Utilities & data
+│   └── products.ts              # Product catalog & functions
+├── public/products/             # SVG product images (32 total)
+└── package.json
+```
 
-## Learn More
+## 📊 Product Catalog
 
-To learn more about Next.js, take a look at the following resources:
+**8 Categories × 4 Products = 32 Items**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Category | Price Range | Items |
+|----------|-------------|-------|
+| Apparel | $19.99–$49.99 | T-Shirt, Jeans, Hoodie, Cap |
+| Footwear | $44.99–$89.99 | Sneakers, Boots, Slip-ons, Cleats |
+| Home & Living | $12.50–$29.99 | Mug, Plate, Bottle, Pillow |
+| Electronics | $14.99–$129.99 | Headphones, Cable, Power Bank, Charger |
+| Sports & Fitness | $19.99–$89.99 | Yoga Mat, Dumbbells, Bands, Rope |
+| Beauty & Personal Care | $8.99–$24.99 | Face Wash, Moisturizer, Lip Balm, Sanitizer |
+| Accessories | $39.99–$149.99 | Backpack, Smart Watch, Sunglasses, Belt |
+| Books & Entertainment | $16.99–$34.99 | Novel, Notebook, Pen Set, Board Game |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Development
 
-## Deploy on Vercel
+```bash
+# Run TypeScript type check
+npx tsc --noEmit
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Build for production
+npm run build
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Start production server
+npm run start
+```
+
+## 🔗 Sharing
+
+- **GitHub**: [VICJAXKOL/my-e-commerce-demo](https://github.com/VICJAXKOL/my-e-commerce-demo)
+- **Live Demo**: https://my-e-commerce-demo-vicjaxkol.vercel.app
+
+## 📝 License
+
+Open source — feel free to use and modify!
