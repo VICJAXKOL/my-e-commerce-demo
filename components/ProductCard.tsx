@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Product } from "../lib/products";
@@ -12,8 +12,17 @@ import { ProductBadge } from "./ProductBadge";
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const [justAdded, setJustAdded] = useState(false);
   const inStock = product.stock > 0;
   const liked = isInWishlist(product.id);
+
+  const handleAddToCart = () => {
+    if (inStock) {
+      addToCart(product);
+      setJustAdded(true);
+      setTimeout(() => setJustAdded(false), 2000);
+    }
+  };
 
   return (
     <div className="relative flex flex-col h-96 rounded-lg border border-slate-700 bg-slate-800 p-4 shadow-sm transition hover:shadow-lg">
@@ -56,11 +65,15 @@ export default function ProductCard({ product }: { product: Product }) {
           View
         </Link>
         <button
-          onClick={() => inStock && addToCart(product)}
+          onClick={handleAddToCart}
           disabled={!inStock}
-          className="ml-auto rounded bg-emerald-600 px-3 py-1 text-sm text-white transition hover:bg-emerald-700 disabled:opacity-50"
+          className={`ml-auto rounded px-3 py-1 text-sm text-white transition ${
+            justAdded
+              ? "bg-green-500 ring-2 ring-green-300 scale-105"
+              : "bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50"
+          }`}
         >
-          Add
+          {justAdded ? "✓ Added" : "Add"}
         </button>
       </div>
     </div>

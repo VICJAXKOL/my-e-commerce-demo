@@ -8,14 +8,16 @@ import { QuantitySelector } from "./QuantitySelector";
 
 export default function AddToCart({ product }: { product: Product }) {
   const { addToCart } = useCart();
-  const [quantity, setQuantity] = useState(1);
-  const inStock = product.stock > 0;
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const [quantity, setQuantity] = useState(1);
+  const [justAdded, setJustAdded] = useState(false);
+  const inStock = product.stock > 0;
   const liked = isInWishlist(product.id);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
-    setQuantity(1);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 2000);
   };
 
   return (
@@ -33,9 +35,13 @@ export default function AddToCart({ product }: { product: Product }) {
       <button
         onClick={handleAddToCart}
         disabled={!inStock}
-        className="w-full rounded bg-black/90 px-4 py-2 text-white transition hover:bg-black disabled:opacity-50"
+        className={`w-full rounded px-4 py-2 text-white transition ${
+          justAdded
+            ? "bg-green-500 ring-2 ring-green-300 scale-105"
+            : "bg-black/90 hover:bg-black disabled:opacity-50"
+        }`}
       >
-        {inStock ? "Add to Cart" : "Out of Stock"}
+        {justAdded ? "✓ Added to Cart" : inStock ? "Add to Cart" : "Out of Stock"}
       </button>
     </div>
   );
