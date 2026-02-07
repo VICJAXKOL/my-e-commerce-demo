@@ -16,15 +16,16 @@ export default function Home() {
     <>
       <Hero />
       <main className="mx-auto max-w-5xl px-4 py-8">
-        <h2 className="mb-4 text-2xl font-semibold">Apparel</h2>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {apparelProducts.slice(0, 4).map((p) => (
-            <div key={p.id}>
-              <ProductCard product={p} />
-            </div>
-          ))}
-        </div>
-      </section>
+        <section className="mt-8">
+          <h2 className="mb-4 text-2xl font-semibold">Apparel</h2>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {apparelProducts.slice(0, 4).map((p) => (
+              <div key={p.id}>
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </div>
+        </section>
 
       <section className="mt-8">
         <h2 className="mb-4 text-2xl font-semibold">Footwear</h2>
