@@ -5,12 +5,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { Product } from "../lib/products";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
 import { ProductRating } from "./ProductRating";
 import { ProductBadge } from "./ProductBadge";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const inStock = product.stock > 0;
+  const liked = isInWishlist(product.id);
 
   return (
     <div className="relative flex flex-col h-96 rounded-lg border border-slate-700 bg-slate-800 p-4 shadow-sm transition hover:shadow-lg">
@@ -39,6 +42,13 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <div className="mt-auto flex gap-2 pt-3">
+        <button
+          aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
+          onClick={() => (liked ? removeFromWishlist(product.id) : addToWishlist(product))}
+          className={`rounded px-2 py-1 text-sm transition ${liked ? "text-pink-400" : "text-slate-300 hover:text-pink-400"}`}
+        >
+          {liked ? "♥" : "♡"}
+        </button>
         <Link
           href={`/products/${product.id}`}
           className="rounded border border-slate-600 px-3 py-1 text-sm text-slate-200 transition hover:bg-slate-700"
