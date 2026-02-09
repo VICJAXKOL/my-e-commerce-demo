@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 export default function FAQPage() {
   const faqs = [
     { q: "What is your return policy?", a: "We offer 30-day returns on all items in original condition." },
@@ -9,19 +11,21 @@ export default function FAQPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-3xl rounded-lg bg-white p-8 shadow-sm">
-      <h1 className="text-2xl font-semibold">Frequently Asked Questions</h1>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="mx-auto max-w-3xl rounded-lg bg-white p-8 shadow-sm pt-20">
+        <h1 className="text-2xl font-semibold">Frequently Asked Questions</h1>
 
-      <div className="mt-6 space-y-4">
-        {faqs.map((faq, i) => (
-          <details key={i} className="border-b pb-4">
-            <summary className="cursor-pointer font-semibold text-zinc-900">
-              {faq.q}
-            </summary>
-            <p className="mt-2 text-zinc-600">{faq.a}</p>
-          </details>
-        ))}
+        <div className="mt-6 space-y-4">
+          {faqs.map((faq, i) => (
+            <details key={i} className="border-b pb-4">
+              <summary className="cursor-pointer font-semibold text-zinc-900">
+                {faq.q}
+              </summary>
+              <p className="mt-2 text-zinc-600">{faq.a}</p>
+            </details>
+          ))}
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }

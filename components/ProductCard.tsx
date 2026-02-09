@@ -13,6 +13,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const [justAdded, setJustAdded] = useState(false);
+  const [isViewing, setIsViewing] = useState(false);
   const inStock = product.stock > 0;
   const liked = isInWishlist(product.id);
 
@@ -25,7 +26,13 @@ export default function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="relative flex flex-col h-96 rounded-lg border border-slate-700 bg-slate-800 p-4 shadow-sm transition hover:shadow-lg">
+    <div
+      className={`relative flex flex-col h-96 rounded-lg border border-slate-700 bg-slate-800 p-4 shadow-sm transition hover:shadow-lg ${
+        isViewing ? "bg-gray-800 text-white" : "bg-zinc-800"
+      }`}
+      onMouseEnter={() => setIsViewing(true)}
+      onMouseLeave={() => setIsViewing(false)}
+    >
       <ProductBadge badge={product.badge} />
       
       {product.image && (
@@ -52,9 +59,9 @@ export default function ProductCard({ product }: { product: Product }) {
 
       <div className="mt-auto flex gap-2 pt-3">
         <button
-          aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
+          aria-label="Add or remove from wishlist"
           onClick={() => (liked ? removeFromWishlist(product.id) : addToWishlist(product))}
-          className={`rounded px-2 py-1 text-sm transition ${liked ? "text-pink-400" : "text-slate-300 hover:text-pink-400"}`}
+          className="rounded px-2 py-1 text-sm transition text-slate-300 hover:text-pink-400"
         >
           {liked ? "♥" : "♡"}
         </button>
