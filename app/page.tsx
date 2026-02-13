@@ -2,6 +2,55 @@ import Link from "next/link";
 import Hero from "../components/Hero";
 import ShowcaseSlider from "../components/ShowcaseSlider";
 
+const shoppingSteps = [
+  {
+    title: "1. Discover",
+    text: "Browse categories and use filters to quickly find products that match your needs.",
+  },
+  {
+    title: "2. Compare",
+    text: "Review product details, ratings, and related items before you decide.",
+  },
+  {
+    title: "3. Checkout",
+    text: "Add to cart, update quantities in one place, and complete checkout in a few steps.",
+  },
+];
+
+const trustPoints = [
+  {
+    label: "Clear Product Info",
+    description: "Simple descriptions and pricing so you can make confident decisions.",
+  },
+  {
+    label: "Fast Navigation",
+    description: "Straightforward pages designed to reduce clicks and speed up shopping.",
+  },
+  {
+    label: "Cart Control",
+    description: "Easily adjust cart quantities, remove items, and review totals before checkout.",
+  },
+  {
+    label: "Helpful Support",
+    description: "Quick access to FAQ and contact pages whenever you need help.",
+  },
+];
+
+const quickFaqs = [
+  {
+    q: "Can I browse before creating an account?",
+    a: "Yes. You can explore products and categories first, then proceed when ready.",
+  },
+  {
+    q: "Where should I go for full product details?",
+    a: "Use the Products page for the complete catalog, detailed information, and add-to-cart actions.",
+  },
+  {
+    q: "Can I edit my cart before checkout?",
+    a: "Yes. You can change item quantity or remove products directly from the cart page.",
+  },
+];
+
 export default function Home() {
   return (
     <>
@@ -57,6 +106,52 @@ export default function Home() {
 
         <section className="mt-8">
           <ShowcaseSlider />
+        </section>
+
+        <section className="mt-8 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-xl font-semibold text-zinc-900 sm:text-2xl">How Shopping Works</h2>
+            <Link href="/products" className="text-sm font-medium text-zinc-700 hover:text-zinc-900">
+              Start Browsing
+            </Link>
+          </div>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {shoppingSteps.map((step) => (
+              <article key={step.title} className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+                <h3 className="text-base font-semibold text-zinc-900">{step.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-600">{step.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+          <h2 className="text-xl font-semibold text-zinc-900 sm:text-2xl">Why People Use MyShop</h2>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            {trustPoints.map((point) => (
+              <article key={point.label} className="rounded-xl border border-zinc-200 bg-white p-4">
+                <h3 className="text-base font-semibold text-zinc-900">{point.label}</h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-600">{point.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-xl font-semibold text-zinc-900 sm:text-2xl">Quick Answers</h2>
+            <Link href="/faq" className="text-sm font-medium text-zinc-700 hover:text-zinc-900">
+              Full FAQ
+            </Link>
+          </div>
+          <div className="mt-5 space-y-4">
+            {quickFaqs.map((faq) => (
+              <article key={faq.q} className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+                <h3 className="text-base font-semibold text-zinc-900">{faq.q}</h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-600">{faq.a}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="mt-8 rounded-2xl border border-zinc-200 bg-zinc-900 p-6 text-white">
