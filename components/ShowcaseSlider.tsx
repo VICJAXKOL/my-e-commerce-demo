@@ -7,27 +7,27 @@ const slides = [
   {
     title: "Style and Apparel",
     description: "Everyday essentials, seasonal looks, and clean fits for work and weekends.",
-    image: "/products/hoodie.svg",
+    image: "https://picsum.photos/id/1011/1000/700",
   },
   {
     title: "Footwear Picks",
     description: "Comfort-first sneakers, boots, and active shoes for different lifestyles.",
-    image: "/products/sneakers.svg",
+    image: "https://picsum.photos/id/26/1000/700",
   },
   {
     title: "Home and Living",
     description: "Practical home items designed to keep spaces simple and functional.",
-    image: "/products/pillow.svg",
+    image: "https://picsum.photos/id/433/1000/700",
   },
   {
     title: "Tech and Gadgets",
     description: "Reliable electronics and accessories selected for daily productivity.",
-    image: "/products/headphones.svg",
+    image: "https://picsum.photos/id/180/1000/700",
   },
   {
     title: "Sports and Fitness",
     description: "Training gear and recovery-focused products to support active routines.",
-    image: "/products/yogamat.svg",
+    image: "https://picsum.photos/id/1076/1000/700",
   },
 ];
 
@@ -96,3 +96,4 @@ export default function ShowcaseSlider() {
     </section>
   );
 }
+

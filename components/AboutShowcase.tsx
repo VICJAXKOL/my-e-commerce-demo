@@ -7,22 +7,22 @@ const slides = [
   {
     title: "Curated Collections",
     text: "We focus on practical, stylish, and reliable choices across everyday categories.",
-    image: "/products/hoodie.svg",
+    image: "https://picsum.photos/id/1027/1000/700",
   },
   {
     title: "Smart Shopping Experience",
     text: "Browse quickly, compare with confidence, and keep checkout simple.",
-    image: "/products/headphones.svg",
+    image: "https://picsum.photos/id/20/1000/700",
   },
   {
     title: "Lifestyle-Ready Picks",
     text: "From home to fitness and fashion, everything is selected for daily use.",
-    image: "/products/yogamat.svg",
+    image: "https://picsum.photos/id/292/1000/700",
   },
   {
     title: "Quality-First Standards",
     text: "Every product type is reviewed for comfort, durability, and value.",
-    image: "/products/sneakers.svg",
+    image: "https://picsum.photos/id/1084/1000/700",
   },
 ];
 
@@ -89,3 +89,4 @@ export default function AboutShowcase() {
     </section>
   );
 }
+

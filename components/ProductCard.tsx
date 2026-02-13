@@ -27,22 +27,22 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <div
-      className={`relative flex flex-col h-96 rounded-lg border border-slate-700 bg-slate-800 p-4 shadow-sm transition hover:shadow-lg ${
+      className={`relative flex h-96 flex-col rounded-lg border border-slate-700 bg-slate-800 p-4 shadow-sm transition hover:shadow-lg ${
         isViewing ? "bg-gray-800 text-white" : "bg-zinc-800"
       }`}
       onMouseEnter={() => setIsViewing(true)}
       onMouseLeave={() => setIsViewing(false)}
     >
       <ProductBadge badge={product.badge} />
-      
+
       {product.image && (
-        <div className="relative h-40 w-full rounded bg-slate-700 flex-shrink-0">
+        <div className="relative h-40 w-full flex-shrink-0 rounded bg-slate-700">
           <Image src={product.image} alt={product.name} fill className="object-contain p-2" />
         </div>
       )}
-      
-      <h3 className="mt-4 text-base font-semibold text-white line-clamp-2">{product.name}</h3>
-      
+
+      <h3 className="mt-4 line-clamp-2 text-base font-semibold text-white">{product.name}</h3>
+
       <div className="mt-1">
         <ProductRating rating={product.rating} reviews={product.reviews} />
       </div>
@@ -61,9 +61,9 @@ export default function ProductCard({ product }: { product: Product }) {
         <button
           aria-label="Add or remove from wishlist"
           onClick={() => (liked ? removeFromWishlist(product.id) : addToWishlist(product))}
-          className="rounded px-2 py-1 text-sm transition text-slate-300 hover:text-pink-400"
+          className="rounded px-2 py-1 text-sm text-slate-300 transition hover:text-pink-400"
         >
-          {liked ? "♥" : "♡"}
+          {liked ? "Saved" : "Save"}
         </button>
         <Link
           href={`/products/${product.id}`}
@@ -80,7 +80,7 @@ export default function ProductCard({ product }: { product: Product }) {
               : "bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50"
           }`}
         >
-          {justAdded ? "✓ Added" : "Add"}
+          {justAdded ? "Added" : "Add"}
         </button>
       </div>
     </div>
