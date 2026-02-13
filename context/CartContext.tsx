@@ -8,6 +8,7 @@ type CartItem = Product & { quantity: number };
 type CartContextValue = {
   items: CartItem[];
   addToCart: (product: Product, qty?: number) => void;
+  updateQuantity: (id: string, qty: number) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
 };
@@ -35,6 +36,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
+  function updateQuantity(id: string, qty: number) {
+    const nextQty = Math.max(1, qty);
+    setItems((prev) => prev.map((i) => (i.id === id ? { ...i, quantity: nextQty } : i)));
+  }
+
   function removeFromCart(id: string) {
     setItems((prev) => prev.filter((i) => i.id !== id));
   }
@@ -46,6 +52,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const value: CartContextValue = {
     items,
     addToCart,
+    updateQuantity,
     removeFromCart,
     clearCart,
   };

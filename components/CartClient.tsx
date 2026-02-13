@@ -5,16 +5,9 @@ import { useCart } from "../context/CartContext";
 import { QuantitySelector } from "./QuantitySelector";
 
 export default function CartClient() {
-  const { items, removeFromCart, clearCart } = useCart();
+  const { items, updateQuantity, removeFromCart, clearCart } = useCart();
 
   if (items.length === 0) return <p>Your cart is empty.</p>;
-
-  const handleQuantityChange = (productId: string, newQty: number) => {
-    // For now, remove and re-add. In a real app, you'd have an updateQuantity method
-    if (newQty === 0) {
-      removeFromCart(productId);
-    }
-  };
 
   return (
     <div className="space-y-4">
@@ -26,7 +19,10 @@ export default function CartClient() {
             <div className="text-sm text-zinc-600">Subtotal: ${(it.price * it.quantity).toFixed(2)}</div>
           </div>
           <div className="flex flex-col gap-2">
-            <QuantitySelector quantity={it.quantity} onQuantityChange={() => {}} />
+            <QuantitySelector
+              quantity={it.quantity}
+              onQuantityChange={(newQty) => updateQuantity(it.id, newQty)}
+            />
             <button
               onClick={() => removeFromCart(it.id)}
               className="rounded border px-3 py-1 text-sm text-red-600 hover:bg-red-50"

@@ -15,7 +15,7 @@ export function QuantitySelector({
         onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
         className="rounded border px-3 py-1"
       >
-        −
+        -
       </button>
       <input
         type="number"

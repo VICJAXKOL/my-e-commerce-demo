@@ -1,6 +1,4 @@
-import Image from "next/image";
-import Link from "next/link";
-import { products, getProductsByCategory } from "../lib/products";
+import { getProductsByCategory } from "../lib/products";
 import ProductCard from "../components/ProductCard";
 import Hero from "../components/Hero";
 
@@ -85,3 +83,4 @@ export default function Home() {
     </>
   );
 }
+

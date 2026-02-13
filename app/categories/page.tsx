@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { products } from "../../lib/products";
 import ProductCard from "../../components/ProductCard";
 
@@ -27,3 +26,4 @@ export default function CategoriesPage() {
     </div>
   );
 }
+
