@@ -72,8 +72,11 @@ export default function Footer() {
             <h3 className="font-semibold">Newsletter</h3>
             <p className="mt-3 text-sm text-slate-300">Subscribe for updates and offers.</p>
             <input
+              id="newsletter-email"
+              name="newsletterEmail"
               type="email"
               placeholder="Your email"
+              autoComplete="email"
               className="focus-ring mt-3 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
             />
             <button className="btn-primary mt-3 w-full px-3 py-2 text-sm font-semibold">Subscribe</button>

@@ -26,6 +26,8 @@ export function SearchAndFilter() {
       {/* Search Bar */}
       <div className="flex gap-2">
         <input
+          id="search-products"
+          name="search"
           type="text"
           placeholder="Search products..."
           value={query}
@@ -37,8 +39,10 @@ export function SearchAndFilter() {
       {/* Filters */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
         <div>
-          <label className="block text-sm font-semibold">Category</label>
+          <label htmlFor="filter-category" className="block text-sm font-semibold">Category</label>
           <select
+            id="filter-category"
+            name="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="mt-1 w-full rounded border px-3 py-2 text-sm"
@@ -56,8 +60,10 @@ export function SearchAndFilter() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold">Sort By</label>
+          <label htmlFor="filter-sort" className="block text-sm font-semibold">Sort By</label>
           <select
+            id="filter-sort"
+            name="sortBy"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
             className="mt-1 w-full rounded border px-3 py-2 text-sm"
@@ -70,8 +76,10 @@ export function SearchAndFilter() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold">Min Price</label>
+          <label htmlFor="filter-min-price" className="block text-sm font-semibold">Min Price</label>
           <input
+            id="filter-min-price"
+            name="minPrice"
             type="number"
             value={minPrice}
             onChange={(e) => setMinPrice(Number(e.target.value))}
@@ -80,8 +88,10 @@ export function SearchAndFilter() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold">Max Price</label>
+          <label htmlFor="filter-max-price" className="block text-sm font-semibold">Max Price</label>
           <input
+            id="filter-max-price"
+            name="maxPrice"
             type="number"
             value={maxPrice}
             onChange={(e) => setMaxPrice(Number(e.target.value))}

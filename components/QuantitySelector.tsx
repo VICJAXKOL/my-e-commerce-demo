@@ -18,6 +18,7 @@ export function QuantitySelector({
         -
       </button>
       <input
+        name="quantity"
         type="number"
         min="1"
         value={quantity}
