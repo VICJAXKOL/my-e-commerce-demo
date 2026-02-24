@@ -18,7 +18,7 @@ export default function NavBar() {
           <Link href="/" className="text-lg font-bold tracking-tight text-zinc-900">
             MyShop
           </Link>
-          <div className="hidden items-center gap-6 md:flex">
+          <div className="hidden items-center gap-6 lg:flex">
             <Link href="/products" className="text-sm text-muted hover:text-zinc-900">
               Products
             </Link>
@@ -31,7 +31,7 @@ export default function NavBar() {
           </div>
         </div>
 
-        <div className="hidden items-center gap-4 md:flex">
+        <div className="hidden items-center gap-4 lg:flex">
           <Link href="/faq" className="text-sm text-muted hover:text-zinc-900">
             Help
           </Link>
@@ -45,7 +45,7 @@ export default function NavBar() {
 
         <button
           type="button"
-          className="focus-ring inline-flex items-center justify-center rounded-md border border-zinc-300 p-2 text-zinc-700 hover:bg-zinc-100 md:hidden"
+          className="focus-ring inline-flex items-center justify-center rounded-md border border-zinc-300 p-2 text-zinc-700 hover:bg-zinc-100 lg:hidden"
           onClick={() => setMenuOpen((prev) => !prev)}
           aria-label="Toggle navigation menu"
           aria-expanded={menuOpen}
@@ -63,7 +63,7 @@ export default function NavBar() {
       </div>
 
       {menuOpen && (
-        <div className="fade-in-up border-t border-black/10 bg-white px-4 pb-4 pt-3 md:hidden">
+        <div className="fade-in-up border-t border-black/10 bg-white px-4 pb-4 pt-3 lg:hidden">
           <div className="flex flex-col gap-3 text-sm">
             <Link href="/products" onClick={closeMenu} className="text-muted hover:text-zinc-900">
               Products
