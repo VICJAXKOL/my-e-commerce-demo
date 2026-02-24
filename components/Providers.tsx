@@ -11,7 +11,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <WishlistProvider>
       <CartProvider>
         <NavBar />
-        <main className="min-h-screen bg-slate-100">
+        <main className="min-h-screen bg-background">
           <div className="mx-auto max-w-5xl p-6">{children}</div>
         </main>
         <Footer />

@@ -2,12 +2,12 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-12 border-t bg-gray-900 text-white py-8">
+    <footer className="mt-12 border-t border-black/10 bg-slate-950 py-10 text-white">
       <div className="mx-auto max-w-5xl px-6">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <h3 className="font-semibold">Shop</h3>
-            <ul className="mt-2 space-y-1 text-sm text-zinc-400">
+            <ul className="mt-3 space-y-2 text-sm text-slate-300">
               <li>
                 <Link href="/products" className="hover:text-white">
                   All Products
@@ -25,9 +25,10 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
           <div>
             <h3 className="font-semibold">Support</h3>
-            <ul className="mt-2 space-y-1 text-sm text-zinc-400">
+            <ul className="mt-3 space-y-2 text-sm text-slate-300">
               <li>
                 <Link href="/contact" className="hover:text-white">
                   Contact Us
@@ -45,9 +46,10 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
           <div>
             <h3 className="font-semibold">Company</h3>
-            <ul className="mt-2 space-y-1 text-sm text-zinc-400">
+            <ul className="mt-3 space-y-2 text-sm text-slate-300">
               <li>
                 <Link href="/about" className="hover:text-white">
                   About Us
@@ -65,22 +67,20 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
           <div>
             <h3 className="font-semibold">Newsletter</h3>
-            <p className="mt-2 text-sm text-zinc-400">
-              Subscribe for updates and offers.
-            </p>
+            <p className="mt-3 text-sm text-slate-300">Subscribe for updates and offers.</p>
             <input
               type="email"
               placeholder="Your email"
-              className="mt-2 w-full rounded border bg-gray-800 px-2 py-1 text-sm text-white"
+              className="focus-ring mt-3 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
             />
-            <button className="mt-2 w-full rounded bg-white px-2 py-1 text-sm text-black">
-              Subscribe
-            </button>
+            <button className="btn-primary mt-3 w-full px-3 py-2 text-sm font-semibold">Subscribe</button>
           </div>
         </div>
-        <div className="mt-6 border-t pt-4 text-center text-sm text-zinc-400">
+
+        <div className="mt-8 border-t border-slate-800 pt-5 text-center text-sm text-slate-400">
           <p>&copy; 2026 MyShop. All rights reserved.</p>
         </div>
       </div>
