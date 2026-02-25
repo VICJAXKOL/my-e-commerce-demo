@@ -1,4 +1,5 @@
 import { getProductById, products } from "../../../lib/products";
+import type { Metadata } from "next";
 import AddToCart from "../../../components/AddToCart";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { RelatedProducts } from "../../../components/RelatedProducts";
@@ -11,6 +12,36 @@ export const dynamicParams = true;
 
 export function generateStaticParams() {
   return products.map((product) => ({ id: product.id }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await Promise.resolve(params);
+  const productId = decodeURIComponent(resolvedParams.id);
+  const product = getProductById(productId);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+      description: "This product is no longer available at MyShop.",
+    };
+  }
+
+  return {
+    title: product.name,
+    description: product.description,
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      type: "website",
+      images: product.image ? [{ url: product.image, alt: product.name }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.description,
+      images: product.image ? [product.image] : undefined,
+    },
+  };
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -34,9 +65,38 @@ export default async function ProductPage({ params }: Props) {
   etaEnd.setDate(etaEnd.getDate() + 5);
   const dateFormat = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" });
   const etaWindow = `${dateFormat.format(etaStart)} - ${dateFormat.format(etaEnd)}`;
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.image ? [product.image] : [],
+    category: product.category,
+    sku: product.id,
+    brand: {
+      "@type": "Brand",
+      name: "MyShop",
+    },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "USD",
+      price: product.price.toFixed(2),
+      availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      itemCondition: "https://schema.org/NewCondition",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: product.rating,
+      reviewCount: product.reviews,
+    },
+  };
 
   return (
     <div className="mx-auto max-w-4xl">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
