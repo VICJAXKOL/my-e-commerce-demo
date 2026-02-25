@@ -28,7 +28,7 @@ export default function ProductCard({ product }: { product: Product }) {
       <ProductBadge badge={product.badge} />
 
       {product.image && (
-        <div className="surface-soft relative h-40 w-full flex-shrink-0 overflow-hidden rounded-xl">
+        <div className="surface-soft relative z-0 h-40 w-full flex-shrink-0 overflow-hidden rounded-xl">
           <Image src={product.image} alt={product.name} fill className="object-cover" />
         </div>
       )}
