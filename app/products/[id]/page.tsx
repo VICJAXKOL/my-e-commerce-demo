@@ -1,88 +1,89 @@
-import { getProductById } from "../../../lib/products";
-import React, { Suspense } from "react";
-import Image from "next/image";
+import { getProductById, products } from "../../../lib/products";
 import AddToCart from "../../../components/AddToCart";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { RelatedProducts } from "../../../components/RelatedProducts";
 import { ProductReviews } from "../../../components/ProductReviews";
 import { ProductRating } from "../../../components/ProductRating";
+import { ProductMediaGallery } from "../../../components/ProductMediaGallery";
 
-type Props = { params: Promise<{ id: string }> };
+type Props = { params: { id: string } };
+export const dynamicParams = true;
 
-export default async function ProductPage({ params }: Props) {
-  const { id } = await params;
+export function generateStaticParams() {
+  return products.map((product) => ({ id: product.id }));
+}
+
+export default function ProductPage({ params }: Props) {
+  const { id } = params;
   const product = getProductById(id);
-  if (!product)
+
+  if (!product) {
     return (
       <div className="mx-auto max-w-4xl text-center">
         <h1 className="text-2xl font-semibold">Product not found</h1>
         <p className="mt-2 text-zinc-600">The product you&apos;re looking for doesn&apos;t exist.</p>
       </div>
     );
+  }
 
   const inStock = product.stock > 0;
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="mx-auto max-w-4xl">
-        <Breadcrumb
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Products", href: "/products" },
-            { label: product.name, href: `/products/${product.id}` },
-          ]}
-        />
+    <div className="mx-auto max-w-4xl">
+      <Breadcrumb
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Products", href: "/products" },
+          { label: product.name, href: `/products/${product.id}` },
+        ]}
+      />
 
-        <div className="rounded-lg bg-gray-800 text-white p-6 shadow-lg">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div className="rounded-lg border border-zinc-200 bg-gray-900 p-2">
-              {product.image && (
-                <div className="relative h-80 w-full">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-contain p-4"
-                  />
-                </div>
-              )}
-            </div>
+      <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <ProductMediaGallery image={product.image} name={product.name} />
 
-            <div>
-              <h1 className="text-2xl font-semibold">{product.name}</h1>
+        <div className="surface-card rounded-2xl p-6">
+          <div className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold text-zinc-700">
+            {product.category}
+          </div>
 
-              <div className="mt-3">
-                <ProductRating rating={product.rating} reviews={product.reviews} />
-              </div>
+          <h1 className="mt-3 text-3xl font-semibold text-zinc-900">{product.name}</h1>
 
-              <p className="mt-4 text-lg text-zinc-300">${product.price.toFixed(2)}</p>
+          <div className="mt-3">
+            <ProductRating rating={product.rating} reviews={product.reviews} />
+          </div>
 
-              <div className="mt-3 text-sm">
-                {inStock ? (
-                  <span className="text-green-400">In Stock ({product.stock} available)</span>
-                ) : (
-                  <span className="text-red-400">Out of Stock</span>
-                )}
-              </div>
+          <p className="mt-4 text-2xl font-semibold text-zinc-900">${product.price.toFixed(2)}</p>
 
-              <p className="mt-4 text-sm text-zinc-400">{product.description}</p>
+          <div className="mt-2 text-sm">
+            {inStock ? (
+              <span className="font-medium text-emerald-700">In Stock ({product.stock} available)</span>
+            ) : (
+              <span className="font-medium text-rose-600">Out of Stock</span>
+            )}
+          </div>
 
-              <div className="mt-6">
-                <AddToCart product={product} />
-              </div>
+          <p className="mt-4 text-sm leading-7 text-muted">{product.description}</p>
 
-              <div className="mt-6 space-y-2 border-t pt-4 text-sm text-zinc-400">
-                <div>✓ Free shipping on orders over $50</div>
-                <div>✓ 30-day money-back guarantee</div>
-                <div>✓ Secure checkout</div>
-              </div>
-            </div>
+          <div className="mt-6">
+            <AddToCart product={product} />
+          </div>
+
+          <div className="mt-6 grid gap-2 rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-700">
+            <div>Free shipping on orders over $50</div>
+            <div>30-day money-back guarantee</div>
+            <div>Secure checkout and encrypted payments</div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs text-zinc-600">
+            <div className="rounded-lg border border-zinc-200 bg-white px-2 py-2">Fast Dispatch</div>
+            <div className="rounded-lg border border-zinc-200 bg-white px-2 py-2">Easy Returns</div>
+            <div className="rounded-lg border border-zinc-200 bg-white px-2 py-2">Buyer Protection</div>
           </div>
         </div>
+      </section>
 
-        <RelatedProducts productId={product.id} />
-        <ProductReviews rating={product.rating} reviews={product.reviews} />
-      </div>
-    </Suspense>
+      <RelatedProducts productId={product.id} />
+      <ProductReviews rating={product.rating} reviews={product.reviews} />
+    </div>
   );
 }

@@ -16,7 +16,7 @@ export function ProductReviews({
               <div className="flex gap-0.5">
                 {[...Array(5)].map((_, i) => (
                   <span key={i} className={i < Math.round(rating) ? "text-yellow-400" : "text-gray-300"}>
-                    ★
+                    ?
                   </span>
                 ))}
               </div>
@@ -34,7 +34,7 @@ export function ProductReviews({
             <div key={i} className="rounded border p-3">
               <div className="flex items-center justify-between">
                 <strong>{review.author}</strong>
-                <span className="text-yellow-400">{"★".repeat(review.rating)}</span>
+                <span className="text-yellow-400">{"?".repeat(review.rating)}</span>
               </div>
               <p className="mt-1 text-zinc-600">{review.text}</p>
             </div>
