@@ -66,7 +66,13 @@ export default function AboutShowcase() {
 
       <div className="grid gap-5 rounded-xl bg-zinc-50 p-4 md:grid-cols-2 md:items-center">
         <div className="relative h-56 overflow-hidden rounded-lg bg-white sm:h-64">
-          <Image src={current.image} alt={current.title} fill className="object-contain p-6" />
+          <Image
+            src={current.image}
+            alt={current.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-contain p-6"
+          />
         </div>
         <div>
           <h3 className="text-lg font-semibold text-zinc-900">{current.title}</h3>

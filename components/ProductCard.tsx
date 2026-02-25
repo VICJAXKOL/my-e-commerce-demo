@@ -29,7 +29,13 @@ export default function ProductCard({ product }: { product: Product }) {
 
       {product.image && (
         <div className="surface-soft relative z-0 h-40 w-full flex-shrink-0 overflow-hidden rounded-xl">
-          <Image src={product.image} alt={product.name} fill className="object-cover" />
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover"
+          />
         </div>
       )}
 
