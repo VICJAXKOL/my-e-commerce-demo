@@ -6,16 +6,17 @@ import { ProductReviews } from "../../../components/ProductReviews";
 import { ProductRating } from "../../../components/ProductRating";
 import { ProductMediaGallery } from "../../../components/ProductMediaGallery";
 
-type Props = { params: { id: string } };
+type Props = { params: { id: string } | Promise<{ id: string }> };
 export const dynamicParams = true;
 
 export function generateStaticParams() {
   return products.map((product) => ({ id: product.id }));
 }
 
-export default function ProductPage({ params }: Props) {
-  const { id } = params;
-  const product = getProductById(id);
+export default async function ProductPage({ params }: Props) {
+  const resolvedParams = await Promise.resolve(params);
+  const productId = decodeURIComponent(resolvedParams.id);
+  const product = getProductById(productId);
 
   if (!product) {
     return (
