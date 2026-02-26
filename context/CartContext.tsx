@@ -14,6 +14,55 @@ type CartContextValue = {
 };
 
 const CartContext = React.createContext<CartContextValue | undefined>(undefined);
+const CART_STORAGE_KEY = "myshop_cart_v1";
+const cartListeners = new Set<() => void>();
+const EMPTY_CART: CartItem[] = [];
+let cartCache: CartItem[] = EMPTY_CART;
+let cartRawCache: string | null = null;
+
+function readCartSnapshot(): CartItem[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(CART_STORAGE_KEY);
+    if (raw === cartRawCache) {
+      return cartCache;
+    }
+
+    cartRawCache = raw;
+    cartCache = raw ? (JSON.parse(raw) as CartItem[]) : EMPTY_CART;
+    return cartCache;
+  } catch {
+    cartRawCache = null;
+    cartCache = EMPTY_CART;
+    return EMPTY_CART;
+  }
+}
+
+function getServerCartSnapshot(): CartItem[] {
+  return EMPTY_CART;
+}
+
+function writeCartSnapshot(next: CartItem[]) {
+  if (typeof window === "undefined") return;
+  cartCache = next;
+  cartRawCache = JSON.stringify(next);
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, cartRawCache);
+  } catch {}
+  cartListeners.forEach((listener) => listener());
+}
+
+function subscribeCart(listener: () => void) {
+  cartListeners.add(listener);
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === CART_STORAGE_KEY) listener();
+  };
+  window.addEventListener("storage", onStorage);
+  return () => {
+    cartListeners.delete(listener);
+    window.removeEventListener("storage", onStorage);
+  };
+}
 
 export function useCart() {
   const ctx = React.useContext(CartContext);
@@ -22,7 +71,11 @@ export function useCart() {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = React.useState<CartItem[]>([]);
+  const items = React.useSyncExternalStore(subscribeCart, readCartSnapshot, getServerCartSnapshot);
+  const setItems = React.useCallback((updater: (prev: CartItem[]) => CartItem[]) => {
+    const current = readCartSnapshot();
+    writeCartSnapshot(updater(current));
+  }, []);
 
   function addToCart(product: Product, qty = 1) {
     setItems((prev) => {
@@ -46,7 +99,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }
 
   function clearCart() {
-    setItems([]);
+    writeCartSnapshot([]);
   }
 
   const value: CartContextValue = {
