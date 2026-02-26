@@ -6,6 +6,7 @@ import { RelatedProducts } from "../../../components/RelatedProducts";
 import { ProductReviews } from "../../../components/ProductReviews";
 import { ProductRating } from "../../../components/ProductRating";
 import { ProductMediaGallery } from "../../../components/ProductMediaGallery";
+import { RecentlyViewedRail } from "../../../components/RecentlyViewedRail";
 
 type Props = { params: { id: string } | Promise<{ id: string }> };
 export const dynamicParams = true;
@@ -154,6 +155,7 @@ export default async function ProductPage({ params }: Props) {
       </section>
 
       <RelatedProducts productId={product.id} />
+      <RecentlyViewedRail currentId={product.id} />
       <ProductReviews rating={product.rating} reviews={product.reviews} />
     </div>
   );
