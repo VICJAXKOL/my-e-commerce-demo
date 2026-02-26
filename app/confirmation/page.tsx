@@ -1,50 +1,76 @@
 import Link from "next/link";
 
-export default function OrderConfirmationPage() {
+type Props = {
+  searchParams:
+    | {
+        order?: string;
+        total?: string;
+        eta?: string;
+      }
+    | Promise<{
+        order?: string;
+        total?: string;
+        eta?: string;
+      }>;
+};
+
+export default async function OrderConfirmationPage({ searchParams }: Props) {
+  const resolved = await Promise.resolve(searchParams);
+  const order = resolved.order ?? "ORD-000000";
+  const total = resolved.total ?? "0.00";
+  const eta = resolved.eta ?? "3-5";
+
+  const now = new Date();
+  const orderDate = now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
   return (
-    <div className="mx-auto max-w-2xl rounded-lg bg-white p-8 shadow-sm">
-      <div className="text-center">
-        <div className="text-5xl">✓</div>
-        <h1 className="mt-4 text-2xl font-semibold">Order Confirmed!</h1>
-        <p className="mt-2 text-zinc-600">Thank you for your purchase. Your order has been received.</p>
-      </div>
+    <div className="mx-auto max-w-3xl pt-20">
+      <section className="rounded-2xl bg-gradient-to-br from-emerald-700 via-emerald-600 to-emerald-700 p-8 text-white shadow-lg">
+        <p className="text-xs uppercase tracking-widest text-emerald-100">Order Complete</p>
+        <h1 className="mt-2 text-3xl font-semibold">Order Confirmed</h1>
+        <p className="mt-2 text-sm text-emerald-50">
+          Thank you for your purchase. A confirmation email has been sent with your order details.
+        </p>
+      </section>
 
-      <div className="mt-8 space-y-4 border-t border-b py-6 text-sm">
-        <div className="flex justify-between">
-          <span>Order Number:</span>
-          <span className="font-semibold">#ORD-2026-001234</span>
+      <section className="surface-card mt-6 rounded-2xl p-6">
+        <div className="grid gap-3 text-sm sm:grid-cols-2">
+          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+            <p className="text-zinc-500">Order Number</p>
+            <p className="font-semibold text-zinc-900">{order}</p>
+          </div>
+          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+            <p className="text-zinc-500">Order Date</p>
+            <p className="font-semibold text-zinc-900">{orderDate}</p>
+          </div>
+          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+            <p className="text-zinc-500">Estimated Delivery</p>
+            <p className="font-semibold text-zinc-900">{eta} business days</p>
+          </div>
+          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+            <p className="text-zinc-500">Total Paid</p>
+            <p className="font-semibold text-zinc-900">${total}</p>
+          </div>
         </div>
-        <div className="flex justify-between">
-          <span>Order Date:</span>
-          <span className="font-semibold">Feb 6, 2026</span>
-        </div>
-        <div className="flex justify-between">
-          <span>Estimated Delivery:</span>
-          <span className="font-semibold">Feb 9 - 11, 2026</span>
-        </div>
-        <div className="flex justify-between">
-          <span>Total:</span>
-          <span className="font-semibold">$149.97</span>
-        </div>
-      </div>
 
-      <div className="mt-6 space-y-3 text-sm">
-        <h2 className="font-semibold">What&apos;s Next?</h2>
-        <ul className="ml-4 space-y-1 list-disc text-zinc-600">
-          <li>A confirmation email has been sent to your inbox</li>
-          <li>You&apos;ll receive a tracking number via email shortly</li>
-          <li>Track your order status anytime from your account</li>
-        </ul>
-      </div>
+        <div className="mt-6 rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700">
+          <h2 className="font-semibold text-zinc-900">What Happens Next</h2>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            <li>Order confirmation has been sent to your email</li>
+            <li>Shipping updates and tracking details will follow</li>
+            <li>Support is available if you need to update details</li>
+          </ul>
+        </div>
 
-      <div className="mt-6 flex gap-3">
-        <Link href="/products" className="flex-1 rounded bg-black px-4 py-2 text-center text-white">
-          Continue Shopping
-        </Link>
-        <Link href="/cart" className="flex-1 rounded border px-4 py-2 text-center">
-          Back to Cart
-        </Link>
-      </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link href="/products" className="btn-primary rounded-md px-4 py-2.5 text-center text-sm font-semibold">
+            Continue Shopping
+          </Link>
+          <Link href="/contact" className="btn-outline rounded-md px-4 py-2.5 text-center text-sm">
+            Contact Support
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
