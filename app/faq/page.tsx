@@ -72,7 +72,11 @@ export default function FAQPage() {
       </section>
 
       <section className="mt-6 rounded-xl border border-zinc-200 bg-white p-5 text-sm text-zinc-700 shadow-sm">
-        Need more help? Use the contact page for direct support and include your order number for faster assistance.
+        Need more help? Use the contact page for direct support, or track shipment status on the{" "}
+        <a href="/track" className="font-semibold text-sky-700 hover:underline">
+          Order Tracking
+        </a>{" "}
+        page.
       </section>
     </div>
   );
