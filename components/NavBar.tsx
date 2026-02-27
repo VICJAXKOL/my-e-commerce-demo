@@ -3,11 +3,14 @@
 import Link from "next/link";
 import React from "react";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
 
 export default function NavBar() {
   const { items } = useCart();
+  const { wishlist } = useWishlist();
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const count = items.reduce((s, i) => s + i.quantity, 0);
+  const cartCount = items.reduce((s, i) => s + i.quantity, 0);
+  const wishlistCount = wishlist.length;
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -32,6 +35,9 @@ export default function NavBar() {
         </div>
 
         <div className="hidden items-center gap-4 lg:flex">
+          <Link href="/wishlist" className="text-sm text-muted hover:text-zinc-900">
+            Wishlist ({wishlistCount})
+          </Link>
           <Link href="/faq" className="text-sm text-muted hover:text-zinc-900">
             Help
           </Link>
@@ -39,7 +45,7 @@ export default function NavBar() {
             Contact
           </Link>
           <Link href="/cart" className="focus-ring rounded-md px-2 py-1 text-sm font-medium text-zinc-900">
-            Cart ({count})
+            Cart ({cartCount})
           </Link>
         </div>
 
@@ -77,11 +83,14 @@ export default function NavBar() {
             <Link href="/faq" onClick={closeMenu} className="text-muted hover:text-zinc-900">
               Help
             </Link>
+            <Link href="/wishlist" onClick={closeMenu} className="text-muted hover:text-zinc-900">
+              Wishlist ({wishlistCount})
+            </Link>
             <Link href="/contact" onClick={closeMenu} className="text-muted hover:text-zinc-900">
               Contact
             </Link>
             <Link href="/cart" onClick={closeMenu} className="btn-outline w-fit px-3 py-1.5 font-medium text-zinc-900">
-              Cart ({count})
+              Cart ({cartCount})
             </Link>
           </div>
         </div>
