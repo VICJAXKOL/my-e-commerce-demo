@@ -24,7 +24,7 @@ export default function Hero() {
           Browse a modern storefront designed for fast discovery, trusted quality, and smooth checkout.
         </p>
 
-        <div className="flex flex-col justify-center gap-4 sm:flex-row">
+        <div className="flex flex-col items-center gap-3">
           <Link href="/products" className="btn-primary inline-flex items-center justify-center px-8 py-3 font-semibold">
             Shop Now
           </Link>
