@@ -62,9 +62,12 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
           </ul>
         </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <Link href={`/track?order=${encodeURIComponent(order)}`} className="btn-primary rounded-md px-4 py-2.5 text-center text-sm font-semibold">
             Track Order
+          </Link>
+          <Link href="/orders" className="btn-outline rounded-md px-4 py-2.5 text-center text-sm">
+            View Orders
           </Link>
           <Link href="/products" className="btn-outline rounded-md px-4 py-2.5 text-center text-sm">
             Continue Shopping

@@ -44,6 +44,9 @@ export default function NavBar() {
           <Link href="/contact" className="text-sm text-muted hover:text-zinc-900">
             Contact
           </Link>
+          <Link href="/orders" className="text-sm text-muted hover:text-zinc-900">
+            Orders
+          </Link>
           <Link href="/cart" className="focus-ring rounded-md px-2 py-1 text-sm font-medium text-zinc-900">
             Cart ({cartCount})
           </Link>
@@ -88,6 +91,9 @@ export default function NavBar() {
             </Link>
             <Link href="/contact" onClick={closeMenu} className="text-muted hover:text-zinc-900">
               Contact
+            </Link>
+            <Link href="/orders" onClick={closeMenu} className="text-muted hover:text-zinc-900">
+              Orders
             </Link>
             <Link href="/cart" onClick={closeMenu} className="btn-outline w-fit px-3 py-1.5 font-medium text-zinc-900">
               Cart ({cartCount})

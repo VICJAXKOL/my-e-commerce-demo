@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useCart } from "../../context/CartContext";
+import { saveOrder } from "../../lib/orders";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -24,6 +25,23 @@ export default function CheckoutPage() {
 
   const placeOrder = () => {
     const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
+    const orderItems = items.map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      image: item.image,
+    }));
+
+    saveOrder({
+      orderNumber,
+      createdAt: new Date().toISOString(),
+      total,
+      etaDays: shippingMethod === "express" ? "2-3" : "3-5",
+      status: "confirmed",
+      items: orderItems,
+    });
+
     clearCart();
     router.push(
       `/confirmation?order=${orderNumber}&total=${total.toFixed(2)}&eta=${shippingMethod === "express" ? "2-3" : "3-5"}`
