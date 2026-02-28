@@ -3,13 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { formatNgn } from "../lib/currency";
 import { useCart } from "../context/CartContext";
 import { QuantitySelector } from "./QuantitySelector";
 
 export default function CartClient() {
   const { items, updateQuantity, removeFromCart, clearCart } = useCart();
   const subtotal = items.reduce((s, it) => s + it.price * it.quantity, 0);
-  const shipping = subtotal >= 50 || items.length === 0 ? 0 : 6.99;
+  const shipping = subtotal >= 50000 || items.length === 0 ? 0 : 3500;
   const total = subtotal + shipping;
 
   if (items.length === 0) {
@@ -48,9 +49,9 @@ export default function CartClient() {
 
             <div className="flex-1">
               <h3 className="font-semibold text-zinc-900">{it.name}</h3>
-              <p className="mt-1 text-sm text-zinc-600">Price: ${it.price.toFixed(2)}</p>
+              <p className="mt-1 text-sm text-zinc-600">Price: {formatNgn(it.price)}</p>
               <p className="mt-1 text-sm font-medium text-zinc-800">
-                Item subtotal: ${(it.price * it.quantity).toFixed(2)}
+                Item subtotal: {formatNgn(it.price * it.quantity)}
               </p>
             </div>
 
@@ -82,16 +83,16 @@ export default function CartClient() {
         <div className="mt-4 space-y-3 text-sm">
           <div className="flex justify-between text-zinc-700">
             <span>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span>{formatNgn(subtotal)}</span>
           </div>
           <div className="flex justify-between text-zinc-700">
             <span>Shipping</span>
-            <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+            <span>{shipping === 0 ? "Free" : formatNgn(shipping)}</span>
           </div>
           <div className="border-t border-zinc-200 pt-3">
             <div className="flex justify-between text-base font-semibold text-zinc-900">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{formatNgn(total)}</span>
             </div>
           </div>
         </div>

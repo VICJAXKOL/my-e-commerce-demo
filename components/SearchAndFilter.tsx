@@ -53,8 +53,8 @@ export function SearchAndFilter() {
   const [category, setCategory] = React.useState("All");
   const [sortBy, setSortBy] = React.useState("newest");
   const [badge, setBadge] = React.useState<BadgeFilter>("All");
-  const [minPrice, setMinPrice] = React.useState(0);
-  const [maxPrice, setMaxPrice] = React.useState(200);
+  const [minPrice, setMinPrice] = React.useState(5000);
+  const [maxPrice, setMaxPrice] = React.useState(300000);
 
   const categories = React.useMemo(
     () => ["All", ...Array.from(new Set(products.map((p) => p.category)))],
@@ -96,8 +96,8 @@ export function SearchAndFilter() {
     setCategory("All");
     setSortBy("newest");
     setBadge("All");
-    setMinPrice(0);
-    setMaxPrice(200);
+    setMinPrice(5000);
+    setMaxPrice(300000);
   };
 
   return (

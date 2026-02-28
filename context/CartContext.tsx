@@ -44,8 +44,11 @@ function getServerCartSnapshot(): CartItem[] {
 
 function writeCartSnapshot(next: CartItem[]) {
   if (typeof window === "undefined") return;
+  const nextRaw = JSON.stringify(next);
+  if (nextRaw === cartRawCache) return;
+
   cartCache = next;
-  cartRawCache = JSON.stringify(next);
+  cartRawCache = nextRaw;
   try {
     localStorage.setItem(CART_STORAGE_KEY, cartRawCache);
   } catch {}
@@ -77,7 +80,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     writeCartSnapshot(updater(current));
   }, []);
 
-  function addToCart(product: Product, qty = 1) {
+  const addToCart = React.useCallback((product: Product, qty = 1) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === product.id);
       if (existing) {
@@ -87,28 +90,31 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...product, quantity: qty }];
     });
-  }
+  }, [setItems]);
 
-  function updateQuantity(id: string, qty: number) {
+  const updateQuantity = React.useCallback((id: string, qty: number) => {
     const nextQty = Math.max(1, qty);
     setItems((prev) => prev.map((i) => (i.id === id ? { ...i, quantity: nextQty } : i)));
-  }
+  }, [setItems]);
 
-  function removeFromCart(id: string) {
+  const removeFromCart = React.useCallback((id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
-  }
+  }, [setItems]);
 
-  function clearCart() {
-    writeCartSnapshot([]);
-  }
+  const clearCart = React.useCallback(() => {
+    writeCartSnapshot(EMPTY_CART);
+  }, []);
 
-  const value: CartContextValue = {
-    items,
-    addToCart,
-    updateQuantity,
-    removeFromCart,
-    clearCart,
-  };
+  const value = React.useMemo<CartContextValue>(
+    () => ({
+      items,
+      addToCart,
+      updateQuantity,
+      removeFromCart,
+      clearCart,
+    }),
+    [items, addToCart, updateQuantity, removeFromCart, clearCart]
+  );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

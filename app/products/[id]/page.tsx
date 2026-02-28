@@ -7,6 +7,7 @@ import { ProductReviews } from "../../../components/ProductReviews";
 import { ProductRating } from "../../../components/ProductRating";
 import { ProductMediaGallery } from "../../../components/ProductMediaGallery";
 import { RecentlyViewedRail } from "../../../components/RecentlyViewedRail";
+import { formatNgn } from "../../../lib/currency";
 
 type Props = { params: { id: string } | Promise<{ id: string }> };
 export const dynamicParams = true;
@@ -80,7 +81,7 @@ export default async function ProductPage({ params }: Props) {
     },
     offers: {
       "@type": "Offer",
-      priceCurrency: "USD",
+      priceCurrency: "NGN",
       price: product.price.toFixed(2),
       availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
@@ -120,7 +121,7 @@ export default async function ProductPage({ params }: Props) {
             <ProductRating rating={product.rating} reviews={product.reviews} />
           </div>
 
-          <p className="mt-4 text-2xl font-semibold text-zinc-900">${product.price.toFixed(2)}</p>
+          <p className="mt-4 text-2xl font-semibold text-zinc-900">{formatNgn(product.price)}</p>
 
             <div className="mt-2 text-sm">
               {inStock ? (
@@ -140,7 +141,7 @@ export default async function ProductPage({ params }: Props) {
             </div>
 
             <div className="mt-6 grid gap-2 rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-700">
-              <div>Free shipping on orders over $50</div>
+              <div>Free shipping on orders over NGN 50,000</div>
               <div>Estimated delivery: {etaWindow}</div>
               <div>30-day money-back guarantee</div>
               <div>Secure checkout and encrypted payments</div>

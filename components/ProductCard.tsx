@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Product } from "../lib/products";
+import { formatNgn } from "../lib/currency";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { ProductRating } from "./ProductRating";
@@ -46,7 +47,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <ProductRating rating={product.rating} reviews={product.reviews} />
       </div>
 
-      <p className="mt-2 text-sm font-medium text-zinc-900">${product.price.toFixed(2)}</p>
+      <p className="mt-2 text-sm font-medium text-zinc-900">{formatNgn(product.price)}</p>
 
       <div className="mt-2 text-xs">
         {inStock ? (
@@ -115,7 +116,7 @@ export default function ProductCard({ product }: { product: Product }) {
               <div>
                 <ProductRating rating={product.rating} reviews={product.reviews} />
                 <p className="mt-3 text-sm leading-6 text-zinc-600">{product.description}</p>
-                <p className="mt-3 text-xl font-semibold text-zinc-900">${product.price.toFixed(2)}</p>
+                <p className="mt-3 text-xl font-semibold text-zinc-900">{formatNgn(product.price)}</p>
                 <div className="mt-4 flex gap-2">
                   <button
                     type="button"

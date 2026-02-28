@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import { formatNgn } from "../lib/currency";
 import { getProductById } from "../lib/products";
 
 export default function WishlistClient() {
@@ -47,7 +48,7 @@ export default function WishlistClient() {
 
           <h3 className="mt-3 line-clamp-2 text-base font-semibold text-zinc-900">{product.name}</h3>
           <p className="mt-1 text-sm text-zinc-600">{product.category}</p>
-          <p className="mt-2 text-sm font-semibold text-zinc-900">${product.price.toFixed(2)}</p>
+          <p className="mt-2 text-sm font-semibold text-zinc-900">{formatNgn(product.price)}</p>
 
           <div className="mt-auto flex gap-2 pt-4">
             <Link href={`/products/${product.id}`} className="btn-outline px-3 py-1.5 text-sm">
@@ -73,4 +74,3 @@ export default function WishlistClient() {
     </div>
   );
 }
-

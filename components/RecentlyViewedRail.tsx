@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import React from "react";
+import { formatNgn } from "../lib/currency";
 import { getProductById } from "../lib/products";
 
 const STORAGE_KEY = "myshop_recently_viewed_v1";
@@ -80,11 +81,10 @@ export function RecentlyViewedRail({ currentId }: { currentId: string }) {
           >
             <p className="line-clamp-1 text-sm font-semibold text-zinc-900">{p.name}</p>
             <p className="mt-1 text-xs text-zinc-500">{p.category}</p>
-            <p className="mt-2 text-sm font-medium text-zinc-800">${p.price.toFixed(2)}</p>
+            <p className="mt-2 text-sm font-medium text-zinc-800">{formatNgn(p.price)}</p>
           </Link>
         ))}
       </div>
     </section>
   );
 }
-

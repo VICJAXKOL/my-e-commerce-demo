@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import React from "react";
+import { formatNgn } from "../../lib/currency";
 import {
   getServerOrdersSnapshot,
   readOrdersSnapshot,
@@ -61,11 +62,13 @@ export default function OrdersPage() {
               <div className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
                 <div>
                   <p className="text-zinc-500">Items</p>
-                  <p className="font-medium text-zinc-900">{order.items.length}</p>
+                  <p className="font-medium text-zinc-900">
+                    {order.items.reduce((sum, item) => sum + item.quantity, 0)}
+                  </p>
                 </div>
                 <div>
                   <p className="text-zinc-500">Total</p>
-                  <p className="font-medium text-zinc-900">${order.total.toFixed(2)}</p>
+                  <p className="font-medium text-zinc-900">{formatNgn(order.total)}</p>
                 </div>
                 <div>
                   <p className="text-zinc-500">Estimated Delivery</p>
@@ -91,4 +94,3 @@ export default function OrdersPage() {
     </div>
   );
 }
-

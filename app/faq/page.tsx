@@ -3,7 +3,7 @@ export default function FAQPage() {
     {
       title: "Orders and Shipping",
       items: [
-        { q: "Do you offer free shipping?", a: "Orders over $50 qualify for free shipping within the US." },
+        { q: "Do you offer free shipping?", a: "Orders over NGN 50,000 qualify for free shipping within the US." },
         { q: "How long does delivery take?", a: "Standard delivery typically takes 3-5 business days." },
         { q: "How do I track my order?", a: "You receive a tracking link by email once your order ships." },
       ],

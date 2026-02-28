@@ -1,21 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React from "react";
+import { formatNgn } from "../../lib/currency";
 import { useCart } from "../../context/CartContext";
-import { saveOrder } from "../../lib/orders";
 
 export default function CheckoutPage() {
-  const router = useRouter();
-  const { items, clearCart } = useCart();
+  const searchParams = useSearchParams();
+  const { items } = useCart();
 
   const [shippingMethod, setShippingMethod] = React.useState<"standard" | "express">("standard");
+  const [email, setEmail] = React.useState("");
   const [promoCode, setPromoCode] = React.useState("");
   const [promoApplied, setPromoApplied] = React.useState(false);
+  const [isRedirecting, setIsRedirecting] = React.useState(false);
+  const [paymentError, setPaymentError] = React.useState<string | null>(null);
+  const wasCanceled =
+    searchParams.get("canceled") === "1" ||
+    searchParams.get("status") === "cancelled";
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = items.length === 0 ? 0 : shippingMethod === "express" ? 14.99 : subtotal >= 50 ? 0 : 6.99;
+  const shipping = items.length === 0 ? 0 : shippingMethod === "express" ? 8000 : subtotal >= 50000 ? 0 : 3500;
   const discount = promoApplied ? subtotal * 0.1 : 0;
   const total = Math.max(0, subtotal + shipping - discount);
 
@@ -23,29 +29,43 @@ export default function CheckoutPage() {
     setPromoApplied(promoCode.trim().toUpperCase() === "WELCOME10");
   };
 
-  const placeOrder = () => {
-    const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
-    const orderItems = items.map((item) => ({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      quantity: item.quantity,
-      image: item.image,
-    }));
+  const startSecurePayment = async () => {
+    const normalizedEmail = email.trim();
+    if (!normalizedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      setPaymentError("Please enter a valid email address before payment.");
+      return;
+    }
 
-    saveOrder({
-      orderNumber,
-      createdAt: new Date().toISOString(),
-      total,
-      etaDays: shippingMethod === "express" ? "2-3" : "3-5",
-      status: "confirmed",
-      items: orderItems,
-    });
+    setPaymentError(null);
+    setIsRedirecting(true);
+    try {
+      const response = await fetch("/api/checkout/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((item) => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image,
+          })),
+          shippingMethod,
+          promoCode: promoApplied ? promoCode : "",
+          email: normalizedEmail,
+        }),
+      });
 
-    clearCart();
-    router.push(
-      `/confirmation?order=${orderNumber}&total=${total.toFixed(2)}&eta=${shippingMethod === "express" ? "2-3" : "3-5"}`
-    );
+      const data = (await response.json()) as { url?: string; error?: string };
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || "Unable to start secure payment.");
+      }
+
+      window.location.assign(data.url);
+    } catch (error) {
+      setIsRedirecting(false);
+      setPaymentError(error instanceof Error ? error.message : "Unable to start secure payment.");
+    }
   };
 
   if (items.length === 0) {
@@ -73,6 +93,16 @@ export default function CheckoutPage() {
           <div className="rounded-md border border-white/20 bg-white/5 px-3 py-2">3. Confirmation</div>
         </div>
       </section>
+      {wasCanceled && (
+        <section className="mt-4 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          Payment was canceled. Your cart is still available for checkout.
+        </section>
+      )}
+      {paymentError && (
+        <section className="mt-4 rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          {paymentError}
+        </section>
+      )}
 
       <section className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
@@ -81,7 +111,14 @@ export default function CheckoutPage() {
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="First name" />
               <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Last name" />
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Email address" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2"
+                placeholder="Email address"
+                required
+              />
               <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Phone number" />
             </div>
           </div>
@@ -106,13 +143,8 @@ export default function CheckoutPage() {
 
           <div className="surface-card rounded-2xl p-6">
             <h2 className="text-xl font-semibold text-zinc-900">Payment</h2>
-            <div className="mt-4 grid gap-4">
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Cardholder name" />
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Card number" />
-              <div className="grid gap-4 sm:grid-cols-2">
-                <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="MM/YY" />
-                <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="CVC" />
-              </div>
+            <div className="mt-4 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-700">
+              You will be redirected to a secure Paystack-hosted payment page to complete your purchase.
             </div>
           </div>
         </div>
@@ -127,7 +159,7 @@ export default function CheckoutPage() {
                   <p className="font-medium text-zinc-900">{item.name}</p>
                   <p className="text-xs text-zinc-500">Qty {item.quantity}</p>
                 </div>
-                <p className="font-medium text-zinc-700">${(item.price * item.quantity).toFixed(2)}</p>
+                <p className="font-medium text-zinc-700">{formatNgn(item.price * item.quantity)}</p>
               </div>
             ))}
           </div>
@@ -148,26 +180,30 @@ export default function CheckoutPage() {
           <div className="mt-4 space-y-2 border-t border-zinc-200 pt-3 text-sm">
             <div className="flex justify-between text-zinc-700">
               <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>{formatNgn(subtotal)}</span>
             </div>
             <div className="flex justify-between text-zinc-700">
               <span>Shipping</span>
-              <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+              <span>{shipping === 0 ? "Free" : formatNgn(shipping)}</span>
             </div>
             <div className="flex justify-between text-zinc-700">
               <span>Discount</span>
-              <span>- ${discount.toFixed(2)}</span>
+              <span>- {formatNgn(discount)}</span>
             </div>
             <div className="flex justify-between border-t border-zinc-200 pt-2 text-base font-semibold text-zinc-900">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{formatNgn(total)}</span>
             </div>
           </div>
 
-          <button onClick={placeOrder} className="btn-primary mt-4 w-full px-4 py-2.5 text-sm font-semibold">
-            Place Order
+          <button
+            onClick={startSecurePayment}
+            disabled={isRedirecting}
+            className="btn-primary mt-4 w-full px-4 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isRedirecting ? "Redirecting to Secure Payment..." : "Continue to Secure Payment"}
           </button>
-          <p className="mt-2 text-center text-xs text-zinc-500">Demo checkout: no real payment is processed.</p>
+          <p className="mt-2 text-center text-xs text-zinc-500">Payments are processed securely by Paystack.</p>
         </aside>
       </section>
     </div>
