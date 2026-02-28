@@ -109,28 +109,34 @@ export default function CheckoutPage() {
           <div className="surface-card rounded-2xl p-6">
             <h2 className="text-xl font-semibold text-zinc-900">Contact Information</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="First name" />
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Last name" />
+              <input id="first-name" name="firstName" autoComplete="given-name" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="First name" />
+              <input id="last-name" name="lastName" autoComplete="family-name" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Last name" />
               <input
+                id="email"
+                name="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
                 className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2"
                 placeholder="Email address"
                 required
               />
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Phone number" />
+              <input id="phone" name="phone" autoComplete="tel" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Phone number (e.g. +234 801 234 5678)" />
             </div>
           </div>
 
           <div className="surface-card rounded-2xl p-6">
             <h2 className="text-xl font-semibold text-zinc-900">Shipping Details</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Street address" />
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="City" />
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="State" />
-              <input className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="ZIP code" />
+              <input id="street-address" name="streetAddress" autoComplete="street-address" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Street address" />
+              <input id="city" name="city" autoComplete="address-level2" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="City / Town" />
+              <input id="state" name="state" autoComplete="address-level1" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="State (e.g. Lagos)" />
+              <input id="lga" name="lga" autoComplete="off" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Local Government Area (LGA)" />
+              <input id="landmark" name="landmark" autoComplete="address-line2" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Landmark (optional)" />
               <select
+                id="shipping-method"
+                name="shippingMethod"
                 value={shippingMethod}
                 onChange={(e) => setShippingMethod(e.target.value as "standard" | "express")}
                 className="focus-ring rounded-lg border border-zinc-300 px-3 py-2"
@@ -166,6 +172,9 @@ export default function CheckoutPage() {
 
           <div className="mt-4 flex gap-2">
             <input
+              id="promo-code"
+              name="promoCode"
+              autoComplete="off"
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value)}
               placeholder="Promo code"
