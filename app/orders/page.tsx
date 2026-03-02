@@ -3,27 +3,43 @@
 import Link from "next/link";
 import React from "react";
 import { formatNgn } from "../../lib/currency";
-import {
-  getServerOrdersSnapshot,
-  readOrdersSnapshot,
-  subscribeOrders,
-  type StoredOrder,
-} from "../../lib/orders";
 
-const STATUS_LABELS: Record<StoredOrder["status"], string> = {
-  confirmed: "Confirmed",
-  packed: "Packed",
-  shipped: "Shipped",
-  out_for_delivery: "Out for Delivery",
-  delivered: "Delivered",
+type ApiOrder = {
+  orderNumber: string;
+  createdAt: string;
+  status: "pending" | "paid" | "failed" | "canceled";
+  etaDays: string;
+  total: number;
+  items: Array<{ id: string; name: string; quantity: number }>;
+};
+
+const STATUS_LABELS: Record<ApiOrder["status"], string> = {
+  pending: "Payment Pending",
+  paid: "Paid",
+  failed: "Payment Failed",
+  canceled: "Canceled",
 };
 
 export default function OrdersPage() {
-  const orders = React.useSyncExternalStore(
-    subscribeOrders,
-    readOrdersSnapshot,
-    getServerOrdersSnapshot
-  );
+  const [orders, setOrders] = React.useState<ApiOrder[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    let active = true;
+    const load = async () => {
+      try {
+        const response = await fetch("/api/orders", { cache: "no-store" });
+        const data = (await response.json()) as { orders?: ApiOrder[] };
+        if (active) setOrders(data.orders ?? []);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    void load();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <div className="mx-auto max-w-5xl pt-20">
@@ -31,11 +47,15 @@ export default function OrdersPage() {
         <p className="text-xs uppercase tracking-widest text-sky-300">Order Center</p>
         <h1 className="mt-2 text-3xl font-semibold">Your Orders</h1>
         <p className="mt-2 text-sm text-slate-300">
-          Review recent purchases, totals, and current shipping status.
+          Review recent purchases, payment status, and delivery timelines.
         </p>
       </section>
 
-      {orders.length === 0 ? (
+      {loading ? (
+        <section className="surface-card rounded-2xl p-8 text-center">
+          <p className="text-sm text-zinc-600">Loading orders...</p>
+        </section>
+      ) : orders.length === 0 ? (
         <section className="surface-card rounded-2xl p-8 text-center">
           <h2 className="text-2xl font-semibold text-zinc-900">No orders yet</h2>
           <p className="mt-2 text-sm text-zinc-600">When you place your first order, it will show up here.</p>

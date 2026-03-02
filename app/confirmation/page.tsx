@@ -1,8 +1,8 @@
 import Link from "next/link";
 import ClearCartOnLoad from "../../components/ClearCartOnLoad";
-import SaveOrderOnLoad from "../../components/SaveOrderOnLoad";
 import { formatNgn } from "../../lib/currency";
 import { verifyPaystackTransaction } from "../../lib/paystack";
+import { getOrderByReference, markOrderPaid } from "../../lib/server/commerce";
 
 type Props = {
   searchParams:
@@ -26,26 +26,32 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
   const resolved = await Promise.resolve(searchParams);
   const reference = resolved.reference ?? resolved.trxref;
   const payment = reference ? await verifyPaystackTransaction(reference) : null;
-  const isPaid = payment?.transactionStatus === "success";
+  let dbOrder = reference ? await getOrderByReference(reference) : null;
+  if (reference && payment?.transactionStatus === "success" && dbOrder?.status !== "paid") {
+    dbOrder = await markOrderPaid(reference);
+  }
+  const isPaid = dbOrder?.status === "paid" || payment?.transactionStatus === "success";
 
   const order =
+    dbOrder?.orderNumber ??
     resolved.order ??
     (payment?.reference ? `PAY-${payment.reference.slice(-8).toUpperCase()}` : "ORD-000000");
   const totalValue =
-    payment?.amountTotal != null ? payment.amountTotal / 100 : Number(resolved.total ?? "0");
+    dbOrder?.totalMinor != null
+      ? dbOrder.totalMinor / 100
+      : payment?.amountTotal != null
+        ? payment.amountTotal / 100
+        : Number(resolved.total ?? "0");
   const eta =
-    payment?.shippingMethod === "express"
+    dbOrder?.shippingMethod === "express"
+      ? "2-3"
+      : dbOrder?.shippingMethod === "standard"
+        ? "3-5"
+        : payment?.shippingMethod === "express"
       ? "2-3"
       : payment?.shippingMethod === "standard"
         ? "3-5"
         : (resolved.eta ?? "3-5");
-  const orderItems =
-    payment?.cartItems.map((item) => ({
-      id: item.id,
-      name: item.name,
-      quantity: item.quantity,
-      price: item.unitAmount / 100,
-    })) ?? [];
 
   const now = new Date();
   const orderDate = now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -53,7 +59,6 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl pt-20">
-      <SaveOrderOnLoad enabled={isPaid} orderNumber={order} total={totalValue} etaDays={eta} items={orderItems} />
       <ClearCartOnLoad enabled={isPaid} />
       <section className="rounded-2xl bg-gradient-to-br from-emerald-700 via-emerald-600 to-emerald-700 p-8 text-white shadow-lg">
         <p className="text-xs uppercase tracking-widest text-emerald-100">Order Complete</p>

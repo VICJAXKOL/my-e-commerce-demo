@@ -11,7 +11,15 @@ export default function CheckoutPage() {
   const { items } = useCart();
 
   const [shippingMethod, setShippingMethod] = React.useState<"standard" | "express">("standard");
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [streetAddress, setStreetAddress] = React.useState("");
+  const [city, setCity] = React.useState("");
+  const [state, setState] = React.useState("");
+  const [lga, setLga] = React.useState("");
+  const [landmark, setLandmark] = React.useState("");
   const [promoCode, setPromoCode] = React.useState("");
   const [promoApplied, setPromoApplied] = React.useState(false);
   const [isRedirecting, setIsRedirecting] = React.useState(false);
@@ -31,17 +39,37 @@ export default function CheckoutPage() {
 
   const startSecurePayment = async () => {
     const normalizedEmail = email.trim();
+    const normalizedPhone = phone.trim().replace(/\s+/g, "");
     if (!normalizedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
       setPaymentError("Please enter a valid email address before payment.");
+      return;
+    }
+    if (!firstName.trim() || !lastName.trim()) {
+      setPaymentError("Please enter your first and last name.");
+      return;
+    }
+    if (!/^(\+234|0)\d{10}$/.test(normalizedPhone)) {
+      setPaymentError("Please enter a valid Nigerian phone number.");
+      return;
+    }
+    if (!streetAddress.trim() || !city.trim() || !state.trim() || !lga.trim()) {
+      setPaymentError("Please complete your shipping address.");
       return;
     }
 
     setPaymentError(null);
     setIsRedirecting(true);
+    const idemKey =
+      typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+        ? crypto.randomUUID()
+        : `${Date.now()}_${Math.random().toString(36).slice(2)}`;
     try {
       const response = await fetch("/api/checkout/session", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": idemKey,
+        },
         body: JSON.stringify({
           items: items.map((item) => ({
             id: item.id,
@@ -53,10 +81,23 @@ export default function CheckoutPage() {
           shippingMethod,
           promoCode: promoApplied ? promoCode : "",
           email: normalizedEmail,
+          contact: {
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            phone: normalizedPhone,
+          },
+          shippingAddress: {
+            streetAddress: streetAddress.trim(),
+            city: city.trim(),
+            state: state.trim(),
+            lga: lga.trim(),
+            landmark: landmark.trim(),
+          },
         }),
       });
 
-      const data = (await response.json()) as { url?: string; error?: string };
+      const raw = await response.text();
+      const data = (raw ? JSON.parse(raw) : {}) as { url?: string; error?: string };
       if (!response.ok || !data.url) {
         throw new Error(data.error || "Unable to start secure payment.");
       }
@@ -64,6 +105,10 @@ export default function CheckoutPage() {
       window.location.assign(data.url);
     } catch (error) {
       setIsRedirecting(false);
+      if (error instanceof SyntaxError) {
+        setPaymentError("Checkout service returned an invalid response. Please try again.");
+        return;
+      }
       setPaymentError(error instanceof Error ? error.message : "Unable to start secure payment.");
     }
   };
@@ -109,8 +154,8 @@ export default function CheckoutPage() {
           <div className="surface-card rounded-2xl p-6">
             <h2 className="text-xl font-semibold text-zinc-900">Contact Information</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <input id="first-name" name="firstName" autoComplete="given-name" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="First name" />
-              <input id="last-name" name="lastName" autoComplete="family-name" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Last name" />
+              <input id="first-name" name="firstName" autoComplete="given-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="First name" />
+              <input id="last-name" name="lastName" autoComplete="family-name" value={lastName} onChange={(e) => setLastName(e.target.value)} className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Last name" />
               <input
                 id="email"
                 name="email"
@@ -122,18 +167,18 @@ export default function CheckoutPage() {
                 placeholder="Email address"
                 required
               />
-              <input id="phone" name="phone" autoComplete="tel" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Phone number (e.g. +234 801 234 5678)" />
+              <input id="phone" name="phone" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Phone number (e.g. +234 801 234 5678)" />
             </div>
           </div>
 
           <div className="surface-card rounded-2xl p-6">
             <h2 className="text-xl font-semibold text-zinc-900">Shipping Details</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <input id="street-address" name="streetAddress" autoComplete="street-address" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Street address" />
-              <input id="city" name="city" autoComplete="address-level2" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="City / Town" />
-              <input id="state" name="state" autoComplete="address-level1" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="State (e.g. Lagos)" />
-              <input id="lga" name="lga" autoComplete="off" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Local Government Area (LGA)" />
-              <input id="landmark" name="landmark" autoComplete="address-line2" className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Landmark (optional)" />
+              <input id="street-address" name="streetAddress" autoComplete="street-address" value={streetAddress} onChange={(e) => setStreetAddress(e.target.value)} className="focus-ring rounded-lg border border-zinc-300 px-3 py-2 sm:col-span-2" placeholder="Street address" />
+              <input id="city" name="city" autoComplete="address-level2" value={city} onChange={(e) => setCity(e.target.value)} className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="City / Town" />
+              <input id="state" name="state" autoComplete="address-level1" value={state} onChange={(e) => setState(e.target.value)} className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="State (e.g. Lagos)" />
+              <input id="lga" name="lga" autoComplete="off" value={lga} onChange={(e) => setLga(e.target.value)} className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Local Government Area (LGA)" />
+              <input id="landmark" name="landmark" autoComplete="address-line2" value={landmark} onChange={(e) => setLandmark(e.target.value)} className="focus-ring rounded-lg border border-zinc-300 px-3 py-2" placeholder="Landmark (optional)" />
               <select
                 id="shipping-method"
                 name="shippingMethod"

@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  pending
+  paid
+  failed
+  canceled
+}
+
+model Order {
+  id               Int         @id @default(autoincrement())
+  orderNumber      String      @unique
+  paystackReference String     @unique
+  guestId          String
+  email            String
+  status           OrderStatus @default(pending)
+  currency         String      @default("NGN")
+  shippingMethod   String
+  promoCode        String?
+  subtotalMinor    Int
+  shippingMinor    Int
+  discountMinor    Int
+  totalMinor       Int
+  shippingAddress  String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  paidAt           DateTime?
+  items            OrderItem[]
+
+  @@index([guestId, createdAt(sort: Desc)])
+}
+
+model OrderItem {
+  id             Int    @id @default(autoincrement())
+  orderId        Int
+  productId      String
+  name           String
+  unitAmountMinor Int
+  quantity       Int
+  image          String?
+  order          Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+model PaymentEvent {
+  id               Int      @id @default(autoincrement())
+  provider         String
+  providerEventId  String?
+  eventType        String
+  paystackReference String?
+  signature        String?
+  payload          String
+  processedAt      DateTime?
+  createdAt        DateTime @default(now())
+
+  @@unique([provider, providerEventId])
+  @@index([paystackReference])
+}
+
+model ProductStock {
+  id        Int      @id @default(autoincrement())
+  productId String   @unique
+  quantity  Int
+  updatedAt DateTime @updatedAt
+}
+
+model IdempotencyRecord {
+  id         Int      @id @default(autoincrement())
+  key        String   @unique
+  route      String
+  requestHash String
+  responseBody String
+  statusCode Int
+  createdAt  DateTime @default(now())
+}
