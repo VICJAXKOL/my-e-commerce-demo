@@ -22,6 +22,7 @@ model Order {
   orderNumber      String      @unique
   paystackReference String     @unique
   guestId          String
+  userId           Int?
   email            String
   status           OrderStatus @default(pending)
   currency         String      @default("NGN")
@@ -35,9 +36,11 @@ model Order {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   paidAt           DateTime?
+  user             User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   items            OrderItem[]
 
   @@index([guestId, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 model OrderItem {
@@ -83,4 +86,25 @@ model IdempotencyRecord {
   responseBody String
   statusCode Int
   createdAt  DateTime @default(now())
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  passwordHash String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  sessions     AuthSession[]
+  orders       Order[]
+}
+
+model AuthSession {
+  id         Int      @id @default(autoincrement())
+  tokenHash  String   @unique
+  userId     Int
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
 }

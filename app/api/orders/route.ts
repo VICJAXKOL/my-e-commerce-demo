@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOrdersByGuestId } from "../../../lib/server/commerce";
+import { getOrdersByGuestId, getOrdersByUserId } from "../../../lib/server/commerce";
+import { getUserFromRequest } from "../../../lib/server/auth/session";
 
 export async function GET(request: NextRequest) {
+  const user = await getUserFromRequest(request);
   const guestId = request.cookies.get("myshop_guest_id")?.value;
-  if (!guestId) {
+  if (!guestId && !user) {
     return NextResponse.json({ orders: [] }, { status: 200 });
   }
 
-  const orders = await getOrdersByGuestId(guestId);
+  const orders = user ? await getOrdersByUserId(user.id) : await getOrdersByGuestId(guestId!);
   const payload = orders.map((order) => ({
     orderNumber: order.orderNumber,
     createdAt: order.createdAt.toISOString(),

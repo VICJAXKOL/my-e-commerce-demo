@@ -13,6 +13,7 @@ type PendingOrderItemInput = {
 
 type CreatePendingOrderInput = {
   guestId: string;
+  userId?: number | null;
   email: string;
   paystackReference: string;
   shippingMethod: string;
@@ -67,6 +68,7 @@ export async function createPendingOrder(input: CreatePendingOrderInput) {
       orderNumber: makeOrderNumber(input.paystackReference),
       paystackReference: input.paystackReference,
       guestId: input.guestId,
+      userId: input.userId ?? null,
       email: input.email,
       status: OrderStatus.pending,
       shippingMethod: input.shippingMethod,
@@ -137,6 +139,15 @@ export async function getOrderByReference(reference: string) {
 export async function getOrdersByGuestId(guestId: string) {
   return prisma.order.findMany({
     where: { guestId },
+    orderBy: { createdAt: "desc" },
+    include: { items: true },
+    take: 20,
+  });
+}
+
+export async function getOrdersByUserId(userId: number) {
+  return prisma.order.findMany({
+    where: { userId },
     orderBy: { createdAt: "desc" },
     include: { items: true },
     take: 20,

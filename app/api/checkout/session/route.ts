@@ -7,6 +7,7 @@ import {
   saveIdempotencyRecord,
   validateStock,
 } from "../../../../lib/server/commerce";
+import { getUserFromRequest } from "../../../../lib/server/auth/session";
 import { checkRateLimit } from "../../../../lib/server/rate-limit";
 import { logEvent } from "../../../../lib/server/log";
 
@@ -71,6 +72,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  const user = await getUserFromRequest(request);
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const rate = checkRateLimit(`checkout:${ip}`, 20, 60_000);
   if (!rate.allowed) {
@@ -221,6 +223,7 @@ export async function POST(request: NextRequest) {
   try {
     await createPendingOrder({
       guestId,
+      userId: user?.id ?? null,
       email,
       paystackReference: reference,
       shippingMethod,
