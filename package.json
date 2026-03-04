@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "clean:dev": "node -e \"const fs=require('fs');const lock='.next/dev/lock';try{fs.rmSync(lock,{force:true});console.log('Removed '+lock);}catch{console.log('No lock file to remove.');}\"",
+    "dev": "node --max-old-space-size=12288 ./node_modules/next/dist/bin/next dev --webpack",
+    "dev:turbo": "node --max-old-space-size=12288 ./node_modules/next/dist/bin/next dev --turbopack",
+    "build": "node --max-old-space-size=8192 ./node_modules/next/dist/bin/next build",
+    "start": "node --max-old-space-size=8192 ./node_modules/next/dist/bin/next start",
     "lint": "eslint"
   },
   "dependencies": {
