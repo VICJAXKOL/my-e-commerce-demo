@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Product } from "../lib/products";
 import { formatNgn } from "../lib/currency";
 import { useCart } from "../context/CartContext";
@@ -11,11 +12,13 @@ import { ProductRating } from "./ProductRating";
 import { ProductBadge } from "./ProductBadge";
 
 export default function ProductCard({ product }: { product: Product }) {
+  const router = useRouter();
   const { addToCart } = useCart();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const [justAdded, setJustAdded] = useState(false);
   const inStock = product.stock > 0;
   const liked = isInWishlist(product.id);
+  const detailsHref = `/products/${product.id}`;
 
   const handleAddToCart = () => {
     if (!inStock) return;
@@ -58,7 +61,10 @@ export default function ProductCard({ product }: { product: Product }) {
 
       <div className="mt-auto grid grid-cols-3 gap-2 pt-3">
         <Link
-          href={`/products/${product.id}`}
+          href={detailsHref}
+          prefetch={false}
+          onMouseEnter={() => router.prefetch(detailsHref)}
+          onFocus={() => router.prefetch(detailsHref)}
           className="btn-outline flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium"
         >
           Quick View
