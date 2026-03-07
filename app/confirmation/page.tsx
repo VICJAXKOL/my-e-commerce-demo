@@ -2,7 +2,7 @@ import Link from "next/link";
 import ClearCartOnLoad from "../../components/ClearCartOnLoad";
 import { formatNgn } from "../../lib/currency";
 import { verifyPaystackTransaction } from "../../lib/paystack";
-import { getOrderByReference } from "../../lib/server/commerce";
+import { getOrderByReference, markOrderPaid } from "../../lib/server/commerce";
 
 type Props = {
   searchParams:
@@ -26,8 +26,16 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
   const resolved = await Promise.resolve(searchParams);
   const reference = resolved.reference ?? resolved.trxref;
   const payment = reference ? await verifyPaystackTransaction(reference) : null;
+  const paymentStatus = payment?.transactionStatus?.toLowerCase() ?? "";
+  const isPaymentVerifiedAsPaid = paymentStatus === "success";
+
+  // Webhook updates can lag behind the browser redirect; reconcile order state on page load.
+  if (reference && isPaymentVerifiedAsPaid) {
+    await markOrderPaid(reference);
+  }
+
   const dbOrder = reference ? await getOrderByReference(reference) : null;
-  const isPaid = dbOrder?.status === "paid";
+  const isPaid = dbOrder?.status === "paid" || isPaymentVerifiedAsPaid;
 
   const order =
     dbOrder?.orderNumber ??
