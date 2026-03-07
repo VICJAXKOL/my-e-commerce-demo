@@ -1,0 +1,12 @@
+
+> my-react-app@0.1.0 dev
+> node --max-old-space-size=4096 ./node_modules/next/dist/bin/next dev --webpack --port 3013
+
+▲ Next.js 16.1.6 (webpack)
+- Local:         http://localhost:3013
+- Network:       http://192.168.33.215:3013
+- Environments: .env.local, .env
+
+✓ Starting...
+✓ Ready in 39.5s
+○ Compiling / ...

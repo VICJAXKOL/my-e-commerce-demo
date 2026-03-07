@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Product } from "../lib/products";
+import type { Product } from "../lib/products";
 
 type CartItem = Product & { quantity: number };
 

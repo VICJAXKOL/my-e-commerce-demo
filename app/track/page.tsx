@@ -49,8 +49,11 @@ export default function TrackOrderPage() {
           }}
         >
           <input
+            id="track-order-number"
+            name="orderNumber"
             value={orderNumber}
             onChange={(e) => setOrderNumber(e.target.value)}
+            autoComplete="off"
             placeholder="Enter order number (e.g. ORD-123456)"
             className="focus-ring w-full rounded-lg border border-zinc-300 px-3 py-2"
           />
@@ -109,4 +112,3 @@ export default function TrackOrderPage() {
     </div>
   );
 }
-

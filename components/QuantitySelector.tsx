@@ -9,6 +9,8 @@ export function QuantitySelector({
   quantity: number;
   onQuantityChange: (qty: number) => void;
 }) {
+  const quantityInputId = React.useId();
+
   return (
     <div className="flex items-center gap-2">
       <button
@@ -18,6 +20,7 @@ export function QuantitySelector({
         -
       </button>
       <input
+        id={quantityInputId}
         name="quantity"
         type="number"
         min="1"
