@@ -1,5 +1,4 @@
 import { createHash } from "crypto";
-import { OrderStatus } from "@prisma/client";
 import { prisma } from "../db";
 import { products } from "../products";
 
@@ -25,6 +24,12 @@ type CreatePendingOrderInput = {
   shippingAddress?: string;
   items: PendingOrderItemInput[];
 };
+
+const ORDER_STATUS = {
+  pending: "pending",
+  paid: "paid",
+  failed: "failed",
+} as const;
 
 function makeOrderNumber(reference: string) {
   return `PAY-${reference.slice(-8).toUpperCase()}`;
@@ -72,7 +77,7 @@ export async function createPendingOrder(input: CreatePendingOrderInput) {
       guestId: input.guestId,
       userId: input.userId ?? null,
       email: input.email,
-      status: OrderStatus.pending,
+      status: ORDER_STATUS.pending,
       shippingMethod: input.shippingMethod,
       promoCode: input.promoCode?.trim() || null,
       subtotalMinor: input.subtotalMinor,
@@ -96,8 +101,8 @@ export async function createPendingOrder(input: CreatePendingOrderInput) {
 
 export async function markOrderFailed(reference: string) {
   return prisma.order.updateMany({
-    where: { paystackReference: reference, status: OrderStatus.pending },
-    data: { status: OrderStatus.failed },
+    where: { paystackReference: reference, status: ORDER_STATUS.pending },
+    data: { status: ORDER_STATUS.failed },
   });
 }
 
@@ -109,7 +114,7 @@ export async function markOrderPaid(reference: string) {
       include: { items: true },
     });
     if (!order) return null;
-    if (order.status === OrderStatus.paid) return order;
+    if (order.status === ORDER_STATUS.paid) return order;
 
     for (const item of order.items) {
       await tx.productStock.updateMany({
@@ -125,7 +130,7 @@ export async function markOrderPaid(reference: string) {
 
     return tx.order.update({
       where: { id: order.id },
-      data: { status: OrderStatus.paid, paidAt: new Date() },
+      data: { status: ORDER_STATUS.paid, paidAt: new Date() },
       include: { items: true },
     });
   });
