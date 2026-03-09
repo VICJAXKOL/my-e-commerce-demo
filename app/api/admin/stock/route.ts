@@ -17,13 +17,15 @@ export async function GET(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   if (!authorized(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = (await request.json()) as { productId?: string; quantity?: number };
-  if (!body.productId || !Number.isInteger(body.quantity) || body.quantity < 0) {
+  const productId = typeof body.productId === "string" ? body.productId : "";
+  const quantity = body.quantity;
+  if (!productId || typeof quantity !== "number" || !Number.isInteger(quantity) || quantity < 0) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
   const updated = await prisma.productStock.upsert({
-    where: { productId: body.productId },
-    create: { productId: body.productId, quantity: body.quantity },
-    update: { quantity: body.quantity },
+    where: { productId },
+    create: { productId, quantity },
+    update: { quantity },
   });
   return NextResponse.json({ stock: updated }, { status: 200 });
 }

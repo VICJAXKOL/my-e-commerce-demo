@@ -18,6 +18,8 @@ export default function RoutePrefetcher() {
   const router = useRouter();
 
   useEffect(() => {
+    if (process.env.NODE_ENV !== "production") return;
+
     const timeoutId = window.setTimeout(() => {
       for (const route of ROUTES_TO_PREFETCH) {
         router.prefetch(route);

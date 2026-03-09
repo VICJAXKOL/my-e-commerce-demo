@@ -5,26 +5,29 @@ import { verifyPaystackTransaction } from "../../lib/paystack";
 import { getOrderByReference, markOrderPaid } from "../../lib/server/commerce";
 
 type Props = {
-  searchParams:
-    | {
-        order?: string;
-        total?: string;
-        eta?: string;
-        reference?: string;
-        trxref?: string;
-      }
-    | Promise<{
-        order?: string;
-        total?: string;
-        eta?: string;
-        reference?: string;
-        trxref?: string;
-      }>;
+  searchParams?: Promise<{
+    order?: string | string[];
+    total?: string | string[];
+    eta?: string | string[];
+    reference?: string | string[];
+    trxref?: string | string[];
+    status?: string | string[];
+    canceled?: string | string[];
+  }>;
 };
 
 export default async function OrderConfirmationPage({ searchParams }: Props) {
-  const resolved = await Promise.resolve(searchParams);
-  const reference = resolved.reference ?? resolved.trxref;
+  const resolved = (await searchParams) ?? {};
+  const readParam = (value?: string | string[]) => (Array.isArray(value) ? value[0] : value);
+  const reference = readParam(resolved.reference) ?? readParam(resolved.trxref);
+  const status = readParam(resolved.status)?.toLowerCase() ?? "";
+  const isSuccessStatus = status === "success" || status === "successful" || status === "paid";
+  const wasCanceled =
+    readParam(resolved.canceled) === "1" ||
+    status === "cancelled" ||
+    status === "canceled" ||
+    status === "failed" ||
+    status === "abandoned";
   const payment = reference ? await verifyPaystackTransaction(reference) : null;
   const paymentStatus = payment?.transactionStatus?.toLowerCase() ?? "";
   const isPaymentVerifiedAsPaid = paymentStatus === "success";
@@ -35,18 +38,19 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
   }
 
   const dbOrder = reference ? await getOrderByReference(reference) : null;
-  const isPaid = dbOrder?.status === "paid" || isPaymentVerifiedAsPaid;
+  const isPaid = dbOrder?.status === "paid" || isPaymentVerifiedAsPaid || isSuccessStatus;
+  const shouldClearCart = !wasCanceled && (Boolean(reference) || isSuccessStatus);
 
   const order =
     dbOrder?.orderNumber ??
-    resolved.order ??
+    readParam(resolved.order) ??
     (payment?.reference ? `PAY-${payment.reference.slice(-8).toUpperCase()}` : "ORD-000000");
   const totalValue =
     dbOrder?.totalMinor != null
       ? dbOrder.totalMinor / 100
       : payment?.amountTotal != null
         ? payment.amountTotal / 100
-        : Number(resolved.total ?? "0");
+        : Number(readParam(resolved.total) ?? "0");
   const eta =
     dbOrder?.shippingMethod === "express"
       ? "2-3"
@@ -56,7 +60,7 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
       ? "2-3"
       : payment?.shippingMethod === "standard"
         ? "3-5"
-        : (resolved.eta ?? "3-5");
+        : (readParam(resolved.eta) ?? "3-5");
 
   const now = new Date();
   const orderDate = now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -64,7 +68,7 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl pt-20">
-      <ClearCartOnLoad enabled={isPaid} />
+      <ClearCartOnLoad enabled={shouldClearCart || isPaid} />
       <section className="rounded-2xl bg-gradient-to-br from-emerald-700 via-emerald-600 to-emerald-700 p-8 text-white shadow-lg">
         <p className="text-xs uppercase tracking-widest text-emerald-100">Order Complete</p>
         <h1 className="mt-2 text-3xl font-semibold">Order Confirmed</h1>

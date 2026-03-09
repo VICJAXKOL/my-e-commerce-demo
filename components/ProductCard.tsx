@@ -19,6 +19,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const inStock = product.stock > 0;
   const liked = isInWishlist(product.id);
   const detailsHref = `/products/${product.id}`;
+  const shouldPrefetch = process.env.NODE_ENV === "production";
 
   const handleAddToCart = () => {
     if (!inStock) return;
@@ -63,8 +64,8 @@ export default function ProductCard({ product }: { product: Product }) {
         <Link
           href={detailsHref}
           prefetch={false}
-          onMouseEnter={() => router.prefetch(detailsHref)}
-          onFocus={() => router.prefetch(detailsHref)}
+          onMouseEnter={shouldPrefetch ? () => router.prefetch(detailsHref) : undefined}
+          onFocus={shouldPrefetch ? () => router.prefetch(detailsHref) : undefined}
           className="btn-outline flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium"
         >
           Quick View
