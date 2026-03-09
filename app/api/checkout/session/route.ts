@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "No valid items were provided for checkout." }, { status: 400 });
   }
 
-  let stockIssues: Array<{ id: string; requested: number; available: number }>;
+  let stockIssues: Awaited<ReturnType<typeof validateStock>>;
   try {
     stockIssues = await validateStock(safeItems.map((item) => ({ id: item.id, quantity: item.quantity })));
   } catch (error) {
