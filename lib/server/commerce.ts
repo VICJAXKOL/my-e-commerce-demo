@@ -53,9 +53,10 @@ export async function ensureProductStockSeeded() {
 export async function validateStock(items: Array<{ id: string; quantity: number }>) {
   await ensureProductStockSeeded();
   const productIds = Array.from(new Set(items.map((item) => item.id)));
-  const stocks = await prisma.productStock.findMany({
-    where: { productId: { in: productIds } },
-  });
+  const stocks: Array<{ productId: string; quantity: number }> =
+    await prisma.productStock.findMany({
+      where: { productId: { in: productIds } },
+    });
   const stockMap = new Map<string, number>(
     stocks.map((s): [string, number] => [s.productId, s.quantity])
   );
