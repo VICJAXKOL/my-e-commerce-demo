@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import { prisma } from "../db";
+import type { Prisma } from "@prisma/client";
 import { products } from "../products";
 
 type PendingOrderItemInput = {
@@ -109,7 +110,7 @@ export async function markOrderFailed(reference: string) {
 
 export async function markOrderPaid(reference: string) {
   await ensureProductStockSeeded();
-  return prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const order = await tx.order.findUnique({
       where: { paystackReference: reference },
       include: { items: true },
