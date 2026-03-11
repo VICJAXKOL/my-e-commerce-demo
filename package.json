@@ -9,6 +9,7 @@
     "dev:webpack": "node --max-old-space-size=4096 ./node_modules/next/dist/bin/next dev --webpack --disable-source-maps",
     "dev:turbo": "node --max-old-space-size=4096 ./node_modules/next/dist/bin/next dev --turbopack --disable-source-maps",
     "build": "node --max-old-space-size=8192 ./node_modules/next/dist/bin/next build",
+    "vercel-build": "prisma migrate deploy && npm run build",
     "start": "node --max-old-space-size=8192 ./node_modules/next/dist/bin/next start",
     "postinstall": "prisma generate",
     "lint": "eslint"
