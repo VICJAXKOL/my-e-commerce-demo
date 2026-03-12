@@ -133,6 +133,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     let active = true;
     const load = async () => {
       const localItems = readCartSnapshot();
+      let isClearing = false;
+      try {
+        const flag = sessionStorage.getItem("myshop_cart_clearing");
+        if (flag) {
+          isClearing = true;
+          sessionStorage.removeItem("myshop_cart_clearing");
+        }
+      } catch {}
+      if (isClearing) {
+        try {
+          await fetch("/api/cart", { method: "DELETE" });
+        } catch {}
+        writeCartSnapshot(EMPTY_CART);
+        return;
+      }
       const serverItems = await fetchServerCart();
       if (!active) return;
       if (serverItems.length > 0) {

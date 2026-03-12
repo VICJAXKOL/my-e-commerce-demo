@@ -14,6 +14,7 @@ export default function ClearCartOnLoad({ enabled }: Props) {
     if (!enabled) return;
     try {
       localStorage.removeItem("myshop_cart_v1");
+      sessionStorage.setItem("myshop_cart_clearing", String(Date.now()));
     } catch {}
     clearCart();
     void fetch("/api/cart", { method: "DELETE" });
