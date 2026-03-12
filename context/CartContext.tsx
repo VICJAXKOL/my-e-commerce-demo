@@ -131,25 +131,39 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     let active = true;
+    const getClearToken = () => {
+      try {
+        return sessionStorage.getItem("myshop_cart_clearing");
+      } catch {
+        return null;
+      }
+    };
+    const isRecentClear = (token: string | null) => {
+      if (!token) return false;
+      const ts = Number(token);
+      return Number.isFinite(ts) && Date.now() - ts < 60_000;
+    };
+    const handleClear = async () => {
+      try {
+        await fetch("/api/cart", { method: "DELETE" });
+      } catch {}
+      writeCartSnapshot(EMPTY_CART);
+      try {
+        sessionStorage.removeItem("myshop_cart_clearing");
+      } catch {}
+    };
     const load = async () => {
       const localItems = readCartSnapshot();
-      let isClearing = false;
-      try {
-        const flag = sessionStorage.getItem("myshop_cart_clearing");
-        if (flag) {
-          isClearing = true;
-          sessionStorage.removeItem("myshop_cart_clearing");
-        }
-      } catch {}
-      if (isClearing) {
-        try {
-          await fetch("/api/cart", { method: "DELETE" });
-        } catch {}
-        writeCartSnapshot(EMPTY_CART);
+      if (isRecentClear(getClearToken())) {
+        await handleClear();
         return;
       }
       const serverItems = await fetchServerCart();
       if (!active) return;
+      if (isRecentClear(getClearToken())) {
+        await handleClear();
+        return;
+      }
       if (serverItems.length > 0) {
         writeCartSnapshot(serverItems);
       } else if (localItems.length > 0) {
