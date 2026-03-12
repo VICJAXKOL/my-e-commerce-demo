@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import React from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 
 export default function NavBar() {
+  const router = useRouter();
+  const { user, logout } = useAuth();
   const { items } = useCart();
   const { wishlist } = useWishlist();
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -13,6 +17,10 @@ export default function NavBar() {
   const wishlistCount = wishlist.length;
 
   const closeMenu = () => setMenuOpen(false);
+  const handleLogout = async () => {
+    await logout();
+    router.refresh();
+  };
 
   return (
     <nav className="fixed left-0 top-0 z-50 w-full border-b border-black/10 bg-white/95 backdrop-blur">
@@ -47,6 +55,29 @@ export default function NavBar() {
           <Link href="/orders" className="text-sm text-muted hover:text-zinc-900">
             Orders
           </Link>
+          {user ? (
+            <>
+              <Link href="/account" className="text-sm text-muted hover:text-zinc-900">
+                Account
+              </Link>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="text-sm font-medium text-zinc-700 hover:text-zinc-900"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="text-sm text-muted hover:text-zinc-900">
+                Sign In
+              </Link>
+              <Link href="/register" className="text-sm text-muted hover:text-zinc-900">
+                Create Account
+              </Link>
+            </>
+          )}
           <Link href="/cart" className="focus-ring rounded-md px-2 py-1 text-sm font-medium text-zinc-900">
             Cart ({cartCount})
           </Link>
@@ -95,6 +126,32 @@ export default function NavBar() {
             <Link href="/orders" onClick={closeMenu} className="text-muted hover:text-zinc-900">
               Orders
             </Link>
+            {user ? (
+              <>
+                <Link href="/account" onClick={closeMenu} className="text-muted hover:text-zinc-900">
+                  Account
+                </Link>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await handleLogout();
+                    closeMenu();
+                  }}
+                  className="text-left text-muted hover:text-zinc-900"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={closeMenu} className="text-muted hover:text-zinc-900">
+                  Sign In
+                </Link>
+                <Link href="/register" onClick={closeMenu} className="text-muted hover:text-zinc-900">
+                  Create Account
+                </Link>
+              </>
+            )}
             <Link href="/cart" onClick={closeMenu} className="btn-outline w-fit px-3 py-1.5 font-medium text-zinc-900">
               Cart ({cartCount})
             </Link>

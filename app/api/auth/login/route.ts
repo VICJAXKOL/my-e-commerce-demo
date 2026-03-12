@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/db";
 import { verifyPassword } from "../../../../lib/server/auth/crypto";
+import { mergeGuestCartToUser } from "../../../../lib/server/commerce";
 import { createSession, sessionCookieName } from "../../../../lib/server/auth/session";
 
 export async function POST(request: NextRequest) {
@@ -15,6 +16,11 @@ export async function POST(request: NextRequest) {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !verifyPassword(password, user.passwordHash)) {
     return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
+  }
+
+  const guestId = request.cookies.get("myshop_guest_id")?.value;
+  if (guestId) {
+    await mergeGuestCartToUser(guestId, user.id);
   }
 
   const { token, expiresAt } = await createSession(user.id);

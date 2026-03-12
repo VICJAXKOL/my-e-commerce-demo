@@ -163,6 +163,59 @@ export async function getOrdersByUserId(userId: number) {
   });
 }
 
+export async function mergeGuestCartToUser(guestId: string, userId: number) {
+  return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    const guestCart = await tx.cart.findUnique({
+      where: { guestId },
+      include: { items: true },
+    });
+    if (!guestCart) return null;
+
+    const userCart = await tx.cart.findUnique({
+      where: { userId },
+      include: { items: true },
+    });
+
+    if (!userCart) {
+      return tx.cart.update({
+        where: { id: guestCart.id },
+        data: { userId, guestId: null },
+        include: { items: true },
+      });
+    }
+
+    const existingByProduct = new Map(
+      userCart.items.map((item) => [item.productId, item])
+    );
+
+    for (const item of guestCart.items) {
+      const existing = existingByProduct.get(item.productId);
+      if (existing) {
+        await tx.cartItem.update({
+          where: { id: existing.id },
+          data: { quantity: existing.quantity + item.quantity },
+        });
+      } else {
+        await tx.cartItem.create({
+          data: {
+            cartId: userCart.id,
+            productId: item.productId,
+            name: item.name,
+            unitAmountMinor: item.unitAmountMinor,
+            quantity: item.quantity,
+            image: item.image,
+          },
+        });
+      }
+    }
+
+    await tx.cartItem.deleteMany({ where: { cartId: guestCart.id } });
+    await tx.cart.delete({ where: { id: guestCart.id } });
+
+    return tx.cart.findUnique({ where: { id: userCart.id }, include: { items: true } });
+  });
+}
+
 export async function recordPaymentEvent(input: {
   provider: string;
   providerEventId?: string;

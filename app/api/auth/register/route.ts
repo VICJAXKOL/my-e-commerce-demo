@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/db";
 import { hashPassword } from "../../../../lib/server/auth/crypto";
+import { mergeGuestCartToUser } from "../../../../lib/server/commerce";
 import { createSession, sessionCookieName } from "../../../../lib/server/auth/session";
 
 export async function POST(request: NextRequest) {
@@ -26,6 +27,11 @@ export async function POST(request: NextRequest) {
       passwordHash: hashPassword(password),
     },
   });
+
+  const guestId = request.cookies.get("myshop_guest_id")?.value;
+  if (guestId) {
+    await mergeGuestCartToUser(guestId, user.id);
+  }
 
   const { token, expiresAt } = await createSession(user.id);
   const response = NextResponse.json({
