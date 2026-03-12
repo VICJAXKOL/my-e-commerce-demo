@@ -10,7 +10,7 @@ function isPublicPath(pathname: string) {
   return false;
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (isPublicPath(pathname)) {
     const hasSession = Boolean(request.cookies.get(AUTH_COOKIE)?.value);
