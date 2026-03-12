@@ -75,6 +75,30 @@ export function useCart() {
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const items = React.useSyncExternalStore(subscribeCart, readCartSnapshot, getServerCartSnapshot);
+  const hydratedRef = React.useRef(false);
+
+  const fetchServerCart = React.useCallback(async () => {
+    try {
+      const response = await fetch("/api/cart", { cache: "no-store" });
+      if (!response.ok) return EMPTY_CART;
+      const data = (await response.json()) as { items?: CartItem[] };
+      return Array.isArray(data.items) ? data.items : EMPTY_CART;
+    } catch {
+      return EMPTY_CART;
+    }
+  }, []);
+
+  const persistServerCart = React.useCallback(async (nextItems: CartItem[]) => {
+    try {
+      await fetch("/api/cart", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: nextItems.map((item) => ({ id: item.id, quantity: item.quantity })),
+        }),
+      });
+    } catch {}
+  }, []);
   const setItems = React.useCallback((updater: (prev: CartItem[]) => CartItem[]) => {
     const current = readCartSnapshot();
     writeCartSnapshot(updater(current));
@@ -104,6 +128,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = React.useCallback(() => {
     writeCartSnapshot(EMPTY_CART);
   }, []);
+
+  React.useEffect(() => {
+    let active = true;
+    const load = async () => {
+      const localItems = readCartSnapshot();
+      const serverItems = await fetchServerCart();
+      if (!active) return;
+      if (serverItems.length > 0) {
+        writeCartSnapshot(serverItems);
+      } else if (localItems.length > 0) {
+        await persistServerCart(localItems);
+      }
+    };
+    void load().finally(() => {
+      if (active) hydratedRef.current = true;
+    });
+    return () => {
+      active = false;
+    };
+  }, [fetchServerCart, persistServerCart]);
+
+  React.useEffect(() => {
+    if (!hydratedRef.current) return;
+    const timeoutId = window.setTimeout(() => {
+      void persistServerCart(items);
+    }, 300);
+    return () => window.clearTimeout(timeoutId);
+  }, [items, persistServerCart]);
 
   const value = React.useMemo<CartContextValue>(
     () => ({

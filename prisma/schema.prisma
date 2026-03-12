@@ -79,6 +79,36 @@ model ProductStock {
   updatedAt DateTime @updatedAt
 }
 
+model Cart {
+  id        Int       @id @default(autoincrement())
+  guestId   String?   @unique
+  userId    Int?      @unique
+  status    String    @default("active")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items     CartItem[]
+
+  @@index([guestId])
+  @@index([userId])
+}
+
+model CartItem {
+  id              Int      @id @default(autoincrement())
+  cartId          Int
+  productId       String
+  name            String
+  unitAmountMinor Int
+  quantity        Int
+  image           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  cart            Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId])
+  @@index([cartId])
+}
+
 model IdempotencyRecord {
   id         Int      @id @default(autoincrement())
   key        String   @unique
@@ -97,6 +127,7 @@ model User {
   updatedAt    DateTime      @updatedAt
   sessions     AuthSession[]
   orders       Order[]
+  carts        Cart[]
 }
 
 model AuthSession {
