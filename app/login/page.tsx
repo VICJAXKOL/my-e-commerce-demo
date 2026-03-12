@@ -2,10 +2,12 @@
 
 import React from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const searchParams = useSearchParams();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
@@ -21,7 +23,8 @@ export default function LoginPage() {
       setError(result.error ?? "Unable to sign in.");
       return;
     }
-    window.location.assign("/account");
+    const next = searchParams.get("next") || "/";
+    window.location.assign(next);
   };
 
   return (

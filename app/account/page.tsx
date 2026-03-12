@@ -43,8 +43,14 @@ export default function AccountPage() {
         <p className="mt-2 text-sm text-zinc-600">Signed in as {user.email}</p>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <Link href="/orders" className="btn-primary rounded-md px-4 py-2.5 text-center text-sm font-semibold">
+          <Link href="/products" className="btn-primary rounded-md px-4 py-2.5 text-center text-sm font-semibold">
+            Explore Products
+          </Link>
+          <Link href="/orders" className="btn-outline rounded-md px-4 py-2.5 text-center text-sm">
             View Orders
+          </Link>
+          <Link href="/" className="btn-outline rounded-md px-4 py-2.5 text-center text-sm">
+            Go to Home
           </Link>
           <button
             type="button"
