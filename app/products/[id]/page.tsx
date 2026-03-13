@@ -155,9 +155,9 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
+      <ProductReviews rating={product.rating} reviews={product.reviews} />
       <RelatedProducts productId={product.id} />
       <RecentlyViewedRail currentId={product.id} />
-      <ProductReviews rating={product.rating} reviews={product.reviews} />
     </div>
   );
 }
