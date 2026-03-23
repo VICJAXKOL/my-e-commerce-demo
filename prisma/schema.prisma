@@ -18,6 +18,11 @@ enum OrderStatus {
   canceled
 }
 
+enum AuthTokenType {
+  email_verification
+  password_reset
+}
+
 model Order {
   id               Int         @id @default(autoincrement())
   orderNumber      String      @unique
@@ -120,14 +125,16 @@ model IdempotencyRecord {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  passwordHash String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  sessions     AuthSession[]
-  orders       Order[]
-  carts        Cart[]
+  id              Int              @id @default(autoincrement())
+  email           String           @unique
+  passwordHash    String
+  emailVerifiedAt DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  sessions        AuthSession[]
+  orders          Order[]
+  carts           Cart[]
+  authTokens      AuthToken[]
 }
 
 model AuthSession {
@@ -139,4 +146,18 @@ model AuthSession {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt(sort: Desc)])
+}
+
+model AuthToken {
+  id         Int           @id @default(autoincrement())
+  tokenHash  String        @unique
+  type       AuthTokenType
+  userId     Int
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime      @default(now())
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type, createdAt(sort: Desc)])
+  @@index([expiresAt])
 }

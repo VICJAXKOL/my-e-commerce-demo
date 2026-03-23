@@ -25,3 +25,11 @@ export function createSessionToken() {
 export function hashSessionToken(token: string) {
   return createHmac("sha256", HASH_SECRET).update(`session:${token}`).digest("hex");
 }
+
+export function createOpaqueToken() {
+  return randomBytes(32).toString("hex");
+}
+
+export function hashOpaqueToken(token: string) {
+  return createHmac("sha256", HASH_SECRET).update(`auth:${token}`).digest("hex");
+}

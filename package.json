@@ -12,7 +12,7 @@
     "vercel-build": "prisma migrate deploy && npm run build",
     "start": "node --max-old-space-size=8192 ./node_modules/next/dist/bin/next start",
     "postinstall": "prisma generate",
-    "lint": "eslint"
+    "lint": "node ./scripts/run-eslint.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",

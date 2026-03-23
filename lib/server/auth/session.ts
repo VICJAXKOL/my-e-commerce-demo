@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../db";
 import { createSessionToken, hashSessionToken } from "./crypto";
 
@@ -6,6 +6,16 @@ const SESSION_COOKIE = "myshop_session";
 
 export function sessionCookieName() {
   return SESSION_COOKIE;
+}
+
+export function setSessionCookie(response: NextResponse, token: string, expiresAt: Date) {
+  response.cookies.set(sessionCookieName(), token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    expires: expiresAt,
+  });
 }
 
 export async function createSession(userId: number) {

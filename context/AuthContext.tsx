@@ -5,13 +5,21 @@ import React from "react";
 type User = {
   id: number;
   email: string;
+  emailVerifiedAt?: string | null;
+};
+
+type AuthResult = {
+  ok: boolean;
+  error?: string;
+  requiresVerification?: boolean;
+  previewUrl?: string;
 };
 
 type AuthContextValue = {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>;
-  register: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>;
+  login: (email: string, password: string) => Promise<AuthResult>;
+  register: (email: string, password: string) => Promise<AuthResult>;
   logout: () => Promise<void>;
 };
 
@@ -50,9 +58,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = (await response.json()) as { user?: User; error?: string };
+      const data = (await response.json()) as {
+        user?: User;
+        error?: string;
+        requiresVerification?: boolean;
+        previewUrl?: string;
+      };
       if (!response.ok) {
-        return { ok: false, error: data.error ?? "Unable to sign in." };
+        return {
+          ok: false,
+          error: data.error ?? "Unable to sign in.",
+          requiresVerification: data.requiresVerification,
+          previewUrl: data.previewUrl,
+        };
       }
       setUser(data.user ?? null);
       return { ok: true };
@@ -68,12 +86,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = (await response.json()) as { user?: User; error?: string };
+      const data = (await response.json()) as {
+        user?: User;
+        error?: string;
+        requiresVerification?: boolean;
+        previewUrl?: string;
+      };
       if (!response.ok) {
         return { ok: false, error: data.error ?? "Unable to create account." };
       }
-      setUser(data.user ?? null);
-      return { ok: true };
+      if (!data.requiresVerification) {
+        setUser(data.user ?? null);
+      } else {
+        setUser(null);
+      }
+      return { ok: true, requiresVerification: data.requiresVerification, previewUrl: data.previewUrl };
     } catch {
       return { ok: false, error: "Unable to create account." };
     }

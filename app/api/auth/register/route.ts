@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/db";
 import { hashPassword } from "../../../../lib/server/auth/crypto";
-import { mergeGuestCartToUser } from "../../../../lib/server/commerce";
-import { createSession, sessionCookieName } from "../../../../lib/server/auth/session";
+import { issueAuthToken } from "../../../../lib/server/auth/tokens";
+import { sendVerificationEmail } from "../../../../lib/server/auth/mailer";
 
 export async function POST(request: NextRequest) {
   const body = (await request.json()) as { email?: string; password?: string };
@@ -28,21 +28,16 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  const guestId = request.cookies.get("myshop_guest_id")?.value;
-  if (guestId) {
-    await mergeGuestCartToUser(guestId, user.id);
-  }
+  const { token } = await issueAuthToken(user.id, "email_verification");
+  const mail = await sendVerificationEmail(user.email, token);
 
-  const { token, expiresAt } = await createSession(user.id);
-  const response = NextResponse.json({
-    user: { id: user.id, email: user.email },
-  });
-  response.cookies.set(sessionCookieName(), token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    expires: expiresAt,
-  });
-  return response;
+  return NextResponse.json(
+    {
+      ok: true,
+      requiresVerification: true,
+      previewUrl: mail.previewUrl,
+      user: { id: user.id, email: user.email, emailVerifiedAt: null },
+    },
+    { status: 201 }
+  );
 }
