@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const AUTH_COOKIE = "myshop_session";
-const PUBLIC_PATHS = new Set(["/login", "/register"]);
+const PUBLIC_PATHS = new Set([
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-email",
+]);
 
 function isPublicPath(pathname: string) {
   if (PUBLIC_PATHS.has(pathname)) return true;
