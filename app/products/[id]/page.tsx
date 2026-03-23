@@ -9,7 +9,7 @@ import { ProductMediaGallery } from "../../../components/ProductMediaGallery";
 import { RecentlyViewedRail } from "../../../components/RecentlyViewedRail";
 import { formatNgn } from "../../../lib/currency";
 
-type Props = { params: { id: string } | Promise<{ id: string }> };
+type Props = { params: Promise<{ id: string }> };
 export const dynamicParams = true;
 
 export function generateStaticParams() {
