@@ -15,6 +15,16 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const cartCount = items.reduce((s, i) => s + i.quantity, 0);
   const wishlistCount = wishlist.length;
+  const primaryLinks = [
+    { href: "/products", label: "Shop" },
+    { href: "/categories", label: "Categories" },
+    { href: "/about", label: "About" },
+  ];
+  const utilityLinks = [
+    { href: "/faq", label: "Help" },
+    { href: "/contact", label: "Contact" },
+    { href: "/orders", label: "Orders" },
+  ];
 
   const closeMenu = () => setMenuOpen(false);
   const handleLogout = async () => {
@@ -23,69 +33,78 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="fixed left-0 top-0 z-50 w-full border-b border-black/10 bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="text-lg font-bold tracking-tight text-zinc-900">
-            MyShop
+    <nav className="fixed left-0 top-0 z-50 w-full border-b border-[var(--border-subtle)] bg-[color:color-mix(in_srgb,var(--surface-1)_92%,transparent)] backdrop-blur-xl">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <div className="flex items-center gap-3 sm:gap-8">
+          <Link href="/" className="flex items-center gap-3" aria-label="Go to home page">
+            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,var(--brand-500),var(--brand-600))] text-sm font-bold text-white shadow-[0_12px_30px_rgba(37,99,235,0.28)]">
+              M
+            </span>
+            <span className="min-w-0">
+              <span className="block text-base font-semibold tracking-tight text-zinc-900 dark:text-white">MyShop</span>
+              <span className="block text-xs text-muted">Curated everyday essentials</span>
+            </span>
           </Link>
+
           <div className="hidden items-center gap-6 lg:flex">
-            <Link href="/products" className="text-sm text-muted hover:text-zinc-900">
-              Products
-            </Link>
-            <Link href="/categories" className="text-sm text-muted hover:text-zinc-900">
-              Categories
-            </Link>
-            <Link href="/about" className="text-sm text-muted hover:text-zinc-900">
-              About
-            </Link>
+            {primaryLinks.map((link) => (
+              <Link key={link.href} href={link.href} className="nav-link text-sm font-medium">
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
 
-        <div className="hidden items-center gap-4 lg:flex">
-          <Link href="/wishlist" className="text-sm text-muted hover:text-zinc-900">
-            Wishlist ({wishlistCount})
-          </Link>
-          <Link href="/faq" className="text-sm text-muted hover:text-zinc-900">
-            Help
-          </Link>
-          <Link href="/contact" className="text-sm text-muted hover:text-zinc-900">
-            Contact
-          </Link>
-          <Link href="/orders" className="text-sm text-muted hover:text-zinc-900">
-            Orders
+        <div className="hidden items-center gap-3 lg:flex">
+          {utilityLinks.map((link) => (
+            <Link key={link.href} href={link.href} className="nav-link text-sm">
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            href="/wishlist"
+            className="btn-ghost focus-ring inline-flex items-center gap-2 px-3 py-2 text-sm font-medium"
+          >
+            <span>Wishlist</span>
+            <span className="rounded-full bg-[var(--surface-2)] px-2 py-0.5 text-xs text-zinc-700 dark:text-white">
+              {wishlistCount}
+            </span>
           </Link>
           {user ? (
             <>
-              <Link href="/account" className="text-sm text-muted hover:text-zinc-900">
+              <Link href="/account" className="nav-link text-sm font-medium">
                 Account
               </Link>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="text-sm font-medium text-zinc-700 hover:text-zinc-900"
+                className="btn-ghost focus-ring px-3 py-2 text-sm font-medium"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link href="/login" className="text-sm text-muted hover:text-zinc-900">
+              <Link href="/login" className="nav-link text-sm font-medium">
                 Sign In
               </Link>
-              <Link href="/register" className="text-sm text-muted hover:text-zinc-900">
+              <Link href="/register" className="btn-outline focus-ring px-4 py-2 text-sm font-semibold">
                 Create Account
               </Link>
             </>
           )}
-          <Link href="/cart" className="focus-ring rounded-md px-2 py-1 text-sm font-medium text-zinc-900">
-            Cart ({cartCount})
+          <Link
+            href="/cart"
+            className="btn-primary focus-ring inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold"
+          >
+            <span>Cart</span>
+            <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs text-white">{cartCount}</span>
           </Link>
         </div>
 
         <button
           type="button"
-          className="focus-ring inline-flex items-center justify-center rounded-md border border-zinc-300 p-2 text-zinc-700 hover:bg-zinc-100 lg:hidden"
+          className="focus-ring inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-1)] text-zinc-700 shadow-[var(--shadow-soft)] hover:bg-[var(--surface-2)] lg:hidden"
           onClick={() => setMenuOpen((prev) => !prev)}
           aria-label="Toggle navigation menu"
           aria-expanded={menuOpen}
@@ -103,32 +122,47 @@ export default function NavBar() {
       </div>
 
       {menuOpen && (
-        <div className="fade-in-up border-t border-black/10 bg-white px-4 pb-4 pt-3 lg:hidden">
-          <div className="flex flex-col gap-3 text-sm">
-            <Link href="/products" onClick={closeMenu} className="text-muted hover:text-zinc-900">
-              Products
-            </Link>
-            <Link href="/categories" onClick={closeMenu} className="text-muted hover:text-zinc-900">
-              Categories
-            </Link>
-            <Link href="/about" onClick={closeMenu} className="text-muted hover:text-zinc-900">
-              About
-            </Link>
-            <Link href="/faq" onClick={closeMenu} className="text-muted hover:text-zinc-900">
-              Help
-            </Link>
-            <Link href="/wishlist" onClick={closeMenu} className="text-muted hover:text-zinc-900">
-              Wishlist ({wishlistCount})
-            </Link>
-            <Link href="/contact" onClick={closeMenu} className="text-muted hover:text-zinc-900">
-              Contact
-            </Link>
-            <Link href="/orders" onClick={closeMenu} className="text-muted hover:text-zinc-900">
-              Orders
+        <div className="fade-in-up border-t border-[var(--border-subtle)] bg-[var(--surface-1)] px-4 pb-5 pt-4 shadow-[var(--shadow-soft)] lg:hidden">
+          <div className="surface-card mx-auto flex max-w-6xl flex-col gap-3 p-4 text-sm">
+            <div className="mb-1 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Browse</p>
+                <p className="mt-1 text-sm text-muted">Find products, manage your cart, and keep shopping.</p>
+              </div>
+              <Link href="/cart" onClick={closeMenu} className="btn-primary focus-ring px-4 py-2 text-sm font-semibold">
+                Cart ({cartCount})
+              </Link>
+            </div>
+
+            {[...primaryLinks, ...utilityLinks].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={closeMenu}
+                className="focus-ring flex items-center justify-between rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-2)] px-4 py-3 text-sm font-medium text-zinc-900 hover:bg-[var(--surface-3)] dark:text-white"
+              >
+                <span>{link.label}</span>
+                <span className="text-muted">→</span>
+              </Link>
+            ))}
+
+            <Link
+              href="/wishlist"
+              onClick={closeMenu}
+              className="focus-ring flex items-center justify-between rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-2)] px-4 py-3 text-sm font-medium text-zinc-900 hover:bg-[var(--surface-3)] dark:text-white"
+            >
+              <span>Wishlist</span>
+              <span className="rounded-full bg-[var(--surface-1)] px-2 py-0.5 text-xs text-zinc-700 dark:text-white">
+                {wishlistCount}
+              </span>
             </Link>
             {user ? (
               <>
-                <Link href="/account" onClick={closeMenu} className="text-muted hover:text-zinc-900">
+                <Link
+                  href="/account"
+                  onClick={closeMenu}
+                  className="focus-ring flex items-center justify-between rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-2)] px-4 py-3 text-sm font-medium text-zinc-900 hover:bg-[var(--surface-3)] dark:text-white"
+                >
                   Account
                 </Link>
                 <button
@@ -137,24 +171,21 @@ export default function NavBar() {
                     await handleLogout();
                     closeMenu();
                   }}
-                  className="text-left text-muted hover:text-zinc-900"
+                  className="btn-outline focus-ring px-4 py-3 text-left text-sm font-medium"
                 >
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <Link href="/login" onClick={closeMenu} className="text-muted hover:text-zinc-900">
+                <Link href="/login" onClick={closeMenu} className="btn-outline focus-ring px-4 py-3 text-sm font-semibold">
                   Sign In
                 </Link>
-                <Link href="/register" onClick={closeMenu} className="text-muted hover:text-zinc-900">
+                <Link href="/register" onClick={closeMenu} className="btn-primary focus-ring px-4 py-3 text-sm font-semibold">
                   Create Account
                 </Link>
               </>
             )}
-            <Link href="/cart" onClick={closeMenu} className="btn-outline w-fit px-3 py-1.5 font-medium text-zinc-900">
-              Cart ({cartCount})
-            </Link>
           </div>
         </div>
       )}

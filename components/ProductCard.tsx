@@ -29,66 +29,96 @@ export default function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="surface-card relative flex h-96 flex-col p-4 transition hover:-translate-y-0.5">
+    <div className="surface-card group relative flex min-h-[28rem] flex-col overflow-hidden p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]">
       <ProductBadge badge={product.badge} />
 
       {product.image && (
-        <div className="surface-soft relative z-0 h-40 w-full flex-shrink-0 overflow-hidden rounded-xl">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover"
-          />
-        </div>
-      )}
-
-      <h3 className="mt-4 line-clamp-2 text-base font-semibold text-zinc-900">{product.name}</h3>
-
-      <div className="mt-1">
-        <ProductRating rating={product.rating} reviews={product.reviews} />
-      </div>
-
-      <p className="mt-2 text-sm font-medium text-zinc-900">{formatNgn(product.price)}</p>
-
-      <div className="mt-2 text-xs">
-        {inStock ? (
-          <span className="text-emerald-700">In Stock ({product.stock})</span>
-        ) : (
-          <span className="text-rose-600">Out of Stock</span>
-        )}
-      </div>
-
-      <div className="mt-auto grid grid-cols-3 gap-2 pt-3">
         <Link
           href={detailsHref}
           prefetch={false}
           onMouseEnter={shouldPrefetch ? () => router.prefetch(detailsHref) : undefined}
           onFocus={shouldPrefetch ? () => router.prefetch(detailsHref) : undefined}
-          className="btn-outline flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium"
+          className="surface-soft relative z-0 block h-52 w-full flex-shrink-0 overflow-hidden rounded-2xl"
         >
-          Quick View
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-950/14 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition duration-500 group-hover:scale-[1.03]"
+          />
         </Link>
+      )}
 
+      <div className="mt-5 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">{product.category}</p>
+          <h3 className="mt-2 line-clamp-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">
+            {product.name}
+          </h3>
+        </div>
         <button
           type="button"
           aria-label="Add or remove from wishlist"
           onClick={() => (liked ? removeFromWishlist(product.id) : addToWishlist(product))}
-          className="btn-outline h-9 rounded-md px-3 text-sm font-medium"
+          className={`focus-ring inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border text-sm shadow-[var(--shadow-soft)] ${
+            liked
+              ? "border-rose-200 bg-rose-50 text-rose-600 dark:border-rose-400/30 dark:bg-rose-500/10 dark:text-rose-200"
+              : "border-[var(--border-subtle)] bg-[var(--surface-1)] text-zinc-700 hover:bg-[var(--surface-2)] dark:text-white"
+          }`}
         >
-          {liked ? "Saved" : "Save"}
+          {liked ? "♥" : "♡"}
         </button>
+      </div>
+
+      <div className="mt-3">
+        <ProductRating rating={product.rating} reviews={product.reviews} />
+      </div>
+
+      <p className="mt-4 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+        {formatNgn(product.price)}
+      </p>
+
+      <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted">{product.description}</p>
+
+      <div className="mt-4 flex items-center gap-2 text-xs">
+        {inStock ? (
+          <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-200">
+            In stock ({product.stock})
+          </span>
+        ) : (
+          <span className="rounded-full bg-rose-50 px-2.5 py-1 font-semibold text-rose-600 ring-1 ring-rose-200 dark:bg-rose-500/10 dark:text-rose-200">
+            Out of stock
+          </span>
+        )}
+        {inStock && product.stock <= 10 && (
+          <span className="rounded-full bg-amber-50 px-2.5 py-1 font-semibold text-amber-700 ring-1 ring-amber-200 dark:bg-amber-500/10 dark:text-amber-200">
+            Low stock
+          </span>
+        )}
+      </div>
+
+      <div className="mt-auto grid grid-cols-2 gap-2 pt-5">
+        <Link
+          href={detailsHref}
+          prefetch={false}
+          onMouseEnter={shouldPrefetch ? () => router.prefetch(detailsHref) : undefined}
+          onFocus={shouldPrefetch ? () => router.prefetch(detailsHref) : undefined}
+          className="btn-outline focus-ring flex h-11 items-center justify-center px-4 text-sm font-semibold"
+        >
+          View Details
+        </Link>
 
         <button
           type="button"
           onClick={handleAddToCart}
           disabled={!inStock}
-          className={`h-9 rounded-md px-3 text-sm font-medium text-white transition ${
-            justAdded ? "bg-emerald-600" : "btn-primary"
+          className={`focus-ring h-11 px-4 text-sm font-semibold text-white ${
+            justAdded ? "rounded-[var(--radius-sm)] bg-[var(--success-500)]" : "btn-primary"
           } ${!inStock ? "cursor-not-allowed opacity-60" : ""}`}
         >
-          {justAdded ? "Added" : "Add"}
+          {justAdded ? "Added to Cart" : "Add to Cart"}
         </button>
       </div>
     </div>
