@@ -10,6 +10,7 @@ import { RecentlyViewedRail } from "../../../components/RecentlyViewedRail";
 import { formatNgn } from "../../../lib/currency";
 
 type Props = { params: Promise<{ id: string }> };
+
 export const dynamicParams = true;
 
 export function generateStaticParams() {
@@ -53,7 +54,7 @@ export default async function ProductPage({ params }: Props) {
 
   if (!product) {
     return (
-      <div className="mx-auto max-w-4xl text-center">
+      <div className="mx-auto max-w-4xl pt-20 text-center">
         <h1 className="text-2xl font-semibold">Product not found</h1>
         <p className="mt-2 text-zinc-600">The product you&apos;re looking for doesn&apos;t exist.</p>
       </div>
@@ -66,7 +67,8 @@ export default async function ProductPage({ params }: Props) {
   const etaEnd = new Date();
   etaEnd.setDate(etaEnd.getDate() + 5);
   const dateFormat = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" });
-  const etaWindow = `${dateFormat.format(etaStart)} - ${dateFormat.format(etaEnd)}`;
+  const etaWindow = `${dateFormat.format(etaStart)} – ${dateFormat.format(etaEnd)}`;
+
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -93,67 +95,153 @@ export default async function ProductPage({ params }: Props) {
     },
   };
 
+  const productHighlights = [
+    {
+      title: "Why shoppers pick it",
+      text: `A well-rated ${product.category.toLowerCase()} essential designed for everyday ease and dependable value.`,
+    },
+    {
+      title: "Delivery expectation",
+      text: `Most orders for this item arrive between ${etaWindow}, with faster dispatch on in-stock items.`,
+    },
+    {
+      title: "Support promise",
+      text: "Easy returns, secure checkout, and responsive support if anything feels unclear before or after purchase.",
+    },
+  ];
+
+  const purchasePromises = [
+    "Free shipping on orders over NGN 50,000",
+    `Estimated delivery: ${etaWindow}`,
+    "30-day money-back guarantee",
+    "Secure checkout with encrypted payments",
+  ];
+
   return (
-    <div className="mx-auto max-w-4xl">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
-      />
-      <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Products", href: "/products" },
-          { label: product.name, href: `/products/${product.id}` },
-        ]}
-      />
+    <div className="mx-auto max-w-6xl space-y-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
 
-      <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <ProductMediaGallery image={product.image} name={product.name} />
+      <div className="space-y-4">
+        <Breadcrumb
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Products", href: "/products" },
+            { label: product.name, href: `/products/${product.id}` },
+          ]}
+        />
 
-        <div className="surface-card rounded-2xl p-6 lg:sticky lg:top-24">
-          <div className="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold text-zinc-700">
-            {product.category}
+        <section className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr] xl:items-start">
+          <div className="space-y-6">
+            <ProductMediaGallery image={product.image} name={product.name} />
+
+            <div className="surface-card p-6 sm:p-8">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Why it stands out</p>
+                  <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+                    Thoughtful product details at a glance
+                  </h2>
+                </div>
+                <div className="rounded-full bg-[var(--surface-2)] px-4 py-2 text-sm font-medium text-zinc-700 dark:text-white">
+                  SKU: {product.id}
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-4 md:grid-cols-3">
+                {productHighlights.map((highlight) => (
+                  <article key={highlight.title} className="surface-soft p-4 sm:p-5">
+                    <h3 className="text-base font-semibold text-zinc-900 dark:text-white">{highlight.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-muted">{highlight.text}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
 
-          <h1 className="mt-3 text-3xl font-semibold text-zinc-900">{product.name}</h1>
+          <div className="space-y-6 xl:sticky xl:top-24">
+            <section className="surface-card p-6 sm:p-8">
+              <div className="flex flex-wrap gap-2">
+                <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-700 dark:text-white">
+                  {product.category}
+                </span>
+                {product.badge && (
+                  <span className="rounded-full bg-[linear-gradient(135deg,var(--brand-500),var(--brand-600))] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white">
+                    {product.badge}
+                  </span>
+                )}
+              </div>
 
-          <div className="mt-3">
-            <ProductRating rating={product.rating} reviews={product.reviews} />
+              <h1 className="mt-4 text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-white">
+                {product.name}
+              </h1>
+
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <ProductRating rating={product.rating} reviews={product.reviews} />
+                <div className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-2)] px-4 py-2 text-sm font-medium text-zinc-700 dark:text-white">
+                  {product.reviews} verified reviews
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 border-y border-[var(--border-subtle)] py-6 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-sm text-muted">Price</p>
+                  <p className="mt-2 text-4xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+                    {formatNgn(product.price)}
+                  </p>
+                </div>
+
+                <div className="sm:text-right">
+                  <div className="text-sm">
+                    {inStock ? (
+                      <span className="rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-200">
+                        In stock ({product.stock} available)
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-rose-50 px-3 py-1 font-semibold text-rose-600 ring-1 ring-rose-200 dark:bg-rose-500/10 dark:text-rose-200">
+                        Out of stock
+                      </span>
+                    )}
+                  </div>
+                  {inStock && product.stock <= 10 && (
+                    <p className="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-rose-600">
+                      Low stock: only {product.stock} left
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <p className="mt-6 text-sm leading-7 text-muted sm:text-base">{product.description}</p>
+
+              <div className="mt-6">
+                <AddToCart product={product} />
+              </div>
+
+              <div className="mt-6 grid gap-3">
+                {purchasePromises.map((promise) => (
+                  <div
+                    key={promise}
+                    className="surface-soft flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 dark:text-slate-200"
+                  >
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--brand-500),var(--brand-600))] text-white">
+                      ✓
+                    </span>
+                    <span>{promise}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="surface-card p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Shopping reassurance</p>
+              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3 xl:grid-cols-1">
+                <div className="surface-soft px-4 py-3 text-sm font-medium text-zinc-700 dark:text-slate-200">Fast dispatch</div>
+                <div className="surface-soft px-4 py-3 text-sm font-medium text-zinc-700 dark:text-slate-200">Easy returns</div>
+                <div className="surface-soft px-4 py-3 text-sm font-medium text-zinc-700 dark:text-slate-200">Buyer protection</div>
+              </div>
+            </section>
           </div>
-
-          <p className="mt-4 text-2xl font-semibold text-zinc-900">{formatNgn(product.price)}</p>
-
-            <div className="mt-2 text-sm">
-              {inStock ? (
-                <span className="font-medium text-emerald-700">In Stock ({product.stock} available)</span>
-              ) : (
-                <span className="font-medium text-rose-600">Out of Stock</span>
-              )}
-            </div>
-            {inStock && product.stock <= 10 && (
-              <p className="mt-1 text-xs font-medium text-rose-600">Low stock: only {product.stock} left</p>
-            )}
-
-          <p className="mt-4 text-sm leading-7 text-muted">{product.description}</p>
-
-            <div className="mt-6">
-              <AddToCart product={product} />
-            </div>
-
-            <div className="mt-6 grid gap-2 rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-700">
-              <div>Free shipping on orders over NGN 50,000</div>
-              <div>Estimated delivery: {etaWindow}</div>
-              <div>30-day money-back guarantee</div>
-              <div>Secure checkout and encrypted payments</div>
-            </div>
-
-          <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs text-zinc-600">
-            <div className="rounded-lg border border-zinc-200 bg-white px-2 py-2">Fast Dispatch</div>
-            <div className="rounded-lg border border-zinc-200 bg-white px-2 py-2">Easy Returns</div>
-            <div className="rounded-lg border border-zinc-200 bg-white px-2 py-2">Buyer Protection</div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       <ProductReviews rating={product.rating} reviews={product.reviews} />
       <RelatedProducts productId={product.id} />
