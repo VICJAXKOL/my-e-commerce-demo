@@ -1,18 +1,21 @@
 import WishlistClient from "../../components/WishlistClient";
+import PageIntro from "../../components/PageIntro";
 
 export default function WishlistPage() {
   return (
-    <div className="mx-auto max-w-5xl pt-20">
-      <section className="mb-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-6 py-8 text-white shadow-lg">
-        <p className="text-xs uppercase tracking-widest text-sky-300">Saved For Later</p>
-        <h1 className="mt-2 text-3xl font-semibold">Your Wishlist</h1>
-        <p className="mt-2 text-sm text-slate-300">
-          Keep track of products you like and move them to cart when you are ready.
-        </p>
-      </section>
+    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+      <PageIntro
+        eyebrow="Saved for later"
+        title="Keep track of products you don’t want to lose"
+        description="Your wishlist helps you compare favorites, revisit interesting items, and move them to cart when you’re ready."
+        highlights={[
+          { title: "Save and compare", text: "Keep products in one place instead of searching for them again later." },
+          { title: "Move to cart quickly", text: "Bring saved items back into your shopping flow without extra clicks." },
+          { title: "Stay organized", text: "Use your wishlist as a shortlist before making final decisions." },
+        ]}
+      />
 
       <WishlistClient />
     </div>
   );
 }
-

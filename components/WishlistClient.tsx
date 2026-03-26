@@ -18,13 +18,13 @@ export default function WishlistClient() {
 
   if (products.length === 0) {
     return (
-      <section className="surface-card rounded-2xl p-8 text-center">
-        <h2 className="text-2xl font-semibold text-zinc-900">Your wishlist is empty</h2>
-        <p className="mt-2 text-sm text-zinc-600">
-          Save products you like so you can compare and buy them later.
+      <section className="surface-card p-8 text-center sm:p-10">
+        <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">Your wishlist is empty</h2>
+        <p className="mt-3 text-sm leading-7 text-muted">
+          Save products you like so you can compare options, revisit favorites, and buy them later.
         </p>
-        <Link href="/products" className="btn-primary mt-5 inline-flex px-5 py-2.5 text-sm font-semibold">
-          Explore Products
+        <Link href="/products" className="btn-primary focus-ring mt-6 inline-flex px-5 py-3 text-sm font-semibold">
+          Explore products
         </Link>
       </section>
     );
@@ -33,8 +33,8 @@ export default function WishlistClient() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {products.map((product) => (
-        <article key={product.id} className="surface-card flex flex-col rounded-2xl p-4">
-          <div className="surface-soft relative h-44 overflow-hidden rounded-xl">
+        <article key={product.id} className="surface-card flex flex-col p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]">
+          <div className="surface-soft relative h-52 overflow-hidden rounded-2xl">
             {product.image ? (
               <Image
                 src={product.image}
@@ -46,25 +46,25 @@ export default function WishlistClient() {
             ) : null}
           </div>
 
-          <h3 className="mt-3 line-clamp-2 text-base font-semibold text-zinc-900">{product.name}</h3>
-          <p className="mt-1 text-sm text-zinc-600">{product.category}</p>
-          <p className="mt-2 text-sm font-semibold text-zinc-900">{formatNgn(product.price)}</p>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted">{product.category}</p>
+          <h3 className="mt-2 line-clamp-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">{product.name}</h3>
+          <p className="mt-3 text-xl font-semibold tracking-tight text-zinc-900 dark:text-white">{formatNgn(product.price)}</p>
 
           <div className="mt-auto flex gap-2 pt-4">
-            <Link href={`/products/${product.id}`} className="btn-outline px-3 py-1.5 text-sm">
+            <Link href={`/products/${product.id}`} className="btn-outline focus-ring px-4 py-3 text-sm font-semibold">
               View
             </Link>
             <button
               type="button"
               onClick={() => addToCart(product)}
-              className="btn-primary px-3 py-1.5 text-sm font-semibold"
+              className="btn-primary focus-ring px-4 py-3 text-sm font-semibold"
             >
-              Add to Cart
+              Add to cart
             </button>
             <button
               type="button"
               onClick={() => removeFromWishlist(product.id)}
-              className="rounded-md border border-rose-200 px-3 py-1.5 text-sm text-rose-600 hover:bg-rose-50"
+              className="btn-outline focus-ring px-4 py-3 text-sm font-semibold text-rose-600 dark:text-rose-200"
             >
               Remove
             </button>

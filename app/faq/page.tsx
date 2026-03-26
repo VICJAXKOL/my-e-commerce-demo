@@ -1,15 +1,18 @@
+import Link from "next/link";
+import PageIntro from "../../components/PageIntro";
+
 export default function FAQPage() {
   const faqSections = [
     {
-      title: "Orders and Shipping",
+      title: "Orders and shipping",
       items: [
         { q: "Do you offer free shipping?", a: "Orders over NGN 50,000 qualify for free shipping within Nigeria." },
-        { q: "How long does delivery take?", a: "Standard delivery typically takes 3-5 business days." },
-        { q: "How do I track my order?", a: "You receive a tracking link by email once your order ships." },
+        { q: "How long does delivery take?", a: "Standard delivery typically takes 3-5 business days, while express delivery arrives faster." },
+        { q: "How do I track my order?", a: "You can use the track page or your orders page once your purchase has been placed." },
       ],
     },
     {
-      title: "Changes and Returns",
+      title: "Changes and returns",
       items: [
         { q: "Can I change my order?", a: "Yes, within 24 hours of purchase. Contact support as soon as possible." },
         { q: "What is your return policy?", a: "We offer 30-day returns on eligible items in original condition." },
@@ -17,53 +20,37 @@ export default function FAQPage() {
       ],
     },
     {
-      title: "Account and Payments",
+      title: "Account and payments",
       items: [
-        { q: "What payment methods are accepted?", a: "We support major credit cards and secure digital payment options." },
-        { q: "Is checkout secure?", a: "Yes. Transactions are encrypted and processed through secure gateways." },
-        { q: "Do you ship internationally?", a: "We currently ship to North America and selected European locations." },
+        { q: "What payment methods are accepted?", a: "We support major payment options through secure hosted payment flows." },
+        { q: "Is checkout secure?", a: "Yes. Transactions are encrypted and processed through secure payment gateways." },
+        { q: "Do you ship internationally?", a: "At the moment the flow is optimized for Nigeria-based delivery expectations." },
       ],
     },
   ];
 
   return (
-    <div className="mx-auto max-w-4xl pt-20">
-      <section className="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-6 py-10 text-white shadow-lg">
-        <p className="text-sm uppercase tracking-widest text-sky-300">Support Center</p>
-        <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">Help and Frequently Asked Questions</h1>
-        <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
-          Quick answers for shipping, returns, payments, and account concerns. If you need personalized
-          help, our support team is available Monday to Friday, 9am-6pm EST.
-        </p>
-      </section>
+    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+      <PageIntro
+        eyebrow="Support center"
+        title="Quick answers for common shopping questions"
+        description="Find guidance on shipping, returns, account access, and payments without needing to leave the flow."
+        highlights={[
+          { title: "Reply time", text: "Most support requests are answered within one business day." },
+          { title: "Returns window", text: "Eligible items can be returned within 30 days." },
+          { title: "Support access", text: "Tracking, contact, and returns pages stay easy to reach." },
+        ]}
+      />
 
-      <section className="mt-6 grid gap-4 sm:grid-cols-3">
-        <article className="surface-card p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Average Reply Time</h2>
-          <p className="mt-1 text-2xl font-semibold text-zinc-900">Under 24h</p>
-          <p className="mt-1 text-xs text-muted">Most requests are resolved within one business day.</p>
-        </article>
-        <article className="surface-card p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Returns Window</h2>
-          <p className="mt-1 text-2xl font-semibold text-zinc-900">30 Days</p>
-          <p className="mt-1 text-xs text-muted">Items must be in original condition for full refund.</p>
-        </article>
-        <article className="surface-card p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Support Availability</h2>
-          <p className="mt-1 text-2xl font-semibold text-zinc-900">Mon-Fri</p>
-          <p className="mt-1 text-xs text-muted">9am-6pm EST via email and phone support.</p>
-        </article>
-      </section>
-
-      <section className="mt-6 space-y-6">
+      <section className="space-y-6">
         {faqSections.map((section) => (
           <div key={section.title} className="surface-card p-6">
-            <h2 className="text-lg font-semibold text-zinc-900">{section.title}</h2>
+            <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-white">{section.title}</h2>
             <div className="mt-4 space-y-3">
               {section.items.map((faq) => (
-                <details key={faq.q} className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
-                  <summary className="cursor-pointer font-semibold text-zinc-900">{faq.q}</summary>
-                  <p className="mt-2 text-sm leading-6 text-zinc-600">{faq.a}</p>
+                <details key={faq.q} className="surface-soft rounded-2xl p-4">
+                  <summary className="cursor-pointer text-sm font-semibold text-zinc-900 dark:text-white">{faq.q}</summary>
+                  <p className="mt-3 text-sm leading-7 text-muted">{faq.a}</p>
                 </details>
               ))}
             </div>
@@ -71,12 +58,16 @@ export default function FAQPage() {
         ))}
       </section>
 
-      <section className="mt-6 rounded-xl border border-zinc-200 bg-white p-5 text-sm text-zinc-700 shadow-sm">
-        Need more help? Use the contact page for direct support, or track shipment status on the{" "}
-        <a href="/track" className="font-semibold text-sky-700 hover:underline">
-          Order Tracking
-        </a>{" "}
-        page.
+      <section className="surface-card p-5 text-sm text-muted">
+        Need more help? Visit the{" "}
+        <Link href="/contact" className="font-semibold text-[var(--brand-600)] hover:text-[var(--brand-700)]">
+          contact page
+        </Link>{" "}
+        for direct support, or use{" "}
+        <Link href="/track" className="font-semibold text-[var(--brand-600)] hover:text-[var(--brand-700)]">
+          order tracking
+        </Link>{" "}
+        for delivery updates.
       </section>
     </div>
   );

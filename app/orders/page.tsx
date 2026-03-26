@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React from "react";
 import { formatNgn } from "../../lib/currency";
+import PageIntro from "../../components/PageIntro";
 
 type ApiOrder = {
   orderNumber: string;
@@ -14,10 +15,17 @@ type ApiOrder = {
 };
 
 const STATUS_LABELS: Record<ApiOrder["status"], string> = {
-  pending: "Payment Pending",
+  pending: "Payment pending",
   paid: "Paid",
-  failed: "Payment Failed",
+  failed: "Payment failed",
   canceled: "Canceled",
+};
+
+const STATUS_CLASSES: Record<ApiOrder["status"], string> = {
+  pending: "bg-amber-50 text-amber-700 ring-1 ring-amber-200 dark:bg-amber-500/10 dark:text-amber-200",
+  paid: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-200",
+  failed: "bg-rose-50 text-rose-700 ring-1 ring-rose-200 dark:bg-rose-500/10 dark:text-rose-200",
+  canceled: "bg-slate-100 text-slate-700 ring-1 ring-slate-200 dark:bg-slate-500/10 dark:text-slate-200",
 };
 
 export default function OrdersPage() {
@@ -42,69 +50,73 @@ export default function OrdersPage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-5xl pt-20">
-      <section className="mb-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-6 py-8 text-white shadow-lg">
-        <p className="text-xs uppercase tracking-widest text-sky-300">Order Center</p>
-        <h1 className="mt-2 text-3xl font-semibold">Your Orders</h1>
-        <p className="mt-2 text-sm text-slate-300">
-          Review recent purchases, payment status, and delivery timelines.
-        </p>
-      </section>
+    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+      <PageIntro
+        eyebrow="Order center"
+        title="Review your recent purchases"
+        description="Track payment status, delivery windows, and the next best action for each order without digging around."
+        highlights={[
+          { title: "Tracking ready", text: "Jump directly into order tracking from each purchase card." },
+          { title: "Totals at a glance", text: "See item count, order totals, and estimated delivery windows quickly." },
+          { title: "Buy again faster", text: "Return to the catalog when you want to reorder or keep shopping." },
+        ]}
+      />
 
       {loading ? (
-        <section className="surface-card rounded-2xl p-8 text-center">
-          <p className="text-sm text-zinc-600">Loading orders...</p>
+        <section className="surface-card p-8 text-center">
+          <p className="text-sm text-muted">Loading orders...</p>
         </section>
       ) : orders.length === 0 ? (
-        <section className="surface-card rounded-2xl p-8 text-center">
-          <h2 className="text-2xl font-semibold text-zinc-900">No orders yet</h2>
-          <p className="mt-2 text-sm text-zinc-600">When you place your first order, it will show up here.</p>
-          <Link href="/products" className="btn-primary mt-5 inline-flex px-5 py-2.5 text-sm font-semibold">
-            Start Shopping
+        <section className="surface-card p-8 text-center sm:p-10">
+          <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">No orders yet</h2>
+          <p className="mt-3 text-sm leading-7 text-muted">When you place your first order, it will show up here with payment and delivery details.</p>
+          <Link href="/products" className="btn-primary focus-ring mt-6 inline-flex px-5 py-3 text-sm font-semibold">
+            Start shopping
           </Link>
         </section>
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
-            <article key={order.orderNumber} className="surface-card rounded-2xl p-5">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <article key={order.orderNumber} className="surface-card p-5 sm:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <p className="text-sm text-zinc-500">Order Number</p>
-                  <p className="font-semibold text-zinc-900">{order.orderNumber}</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Order number</p>
+                  <p className="mt-2 text-xl font-semibold tracking-tight text-zinc-900 dark:text-white">{order.orderNumber}</p>
+                  <p className="mt-2 text-sm text-muted">
+                    Placed on {new Date(order.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+                  </p>
                 </div>
-                <div className="text-sm text-zinc-700">
-                  <span className="rounded-full bg-zinc-100 px-2 py-1 text-xs font-semibold">
-                    {STATUS_LABELS[order.status]}
-                  </span>
-                </div>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] ${STATUS_CLASSES[order.status]}`}>
+                  {STATUS_LABELS[order.status]}
+                </span>
               </div>
 
-              <div className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
-                <div>
-                  <p className="text-zinc-500">Items</p>
-                  <p className="font-medium text-zinc-900">
+              <div className="mt-5 grid gap-4 md:grid-cols-3">
+                <div className="surface-soft p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Items</p>
+                  <p className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
                     {order.items.reduce((sum, item) => sum + item.quantity, 0)}
                   </p>
                 </div>
-                <div>
-                  <p className="text-zinc-500">Total</p>
-                  <p className="font-medium text-zinc-900">{formatNgn(order.total)}</p>
+                <div className="surface-soft p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Total</p>
+                  <p className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">{formatNgn(order.total)}</p>
                 </div>
-                <div>
-                  <p className="text-zinc-500">Estimated Delivery</p>
-                  <p className="font-medium text-zinc-900">{order.etaDays} business days</p>
+                <div className="surface-soft p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Estimated delivery</p>
+                  <p className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">{order.etaDays} days</p>
                 </div>
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-5 flex flex-wrap gap-3">
                 <Link
                   href={`/track?order=${encodeURIComponent(order.orderNumber)}`}
-                  className="btn-primary rounded-md px-4 py-2 text-sm font-semibold"
+                  className="btn-primary focus-ring px-4 py-3 text-sm font-semibold"
                 >
-                  Track Order
+                  Track order
                 </Link>
-                <Link href="/products" className="btn-outline rounded-md px-4 py-2 text-sm">
-                  Buy Again
+                <Link href="/products" className="btn-outline focus-ring px-4 py-3 text-sm font-semibold">
+                  Buy again
                 </Link>
               </div>
             </article>

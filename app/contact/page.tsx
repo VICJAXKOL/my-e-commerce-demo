@@ -1,78 +1,64 @@
+import PageIntro from "../../components/PageIntro";
+
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-5xl pt-20">
-      <section className="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-6 py-10 text-white shadow-lg">
-        <p className="text-sm uppercase tracking-widest text-sky-300">Contact MyShop</p>
-        <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">We&apos;re Here To Help</h1>
-        <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
-          Reach out for order support, shipping updates, returns, or account questions. Include your order
-          number in your message for quicker resolution.
-        </p>
-      </section>
+    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+      <PageIntro
+        eyebrow="Contact support"
+        title="We’re here to help with orders, returns, and account issues"
+        description="Reach out for shipping updates, order support, returns, or account questions. Including your order number helps us respond faster."
+        highlights={[
+          { title: "Email support", text: "support@myshop.com" },
+          { title: "Phone support", text: "1-800-MYSHOP-1 · Monday to Friday" },
+          { title: "Typical response", text: "Most requests are answered within 24 business hours." },
+        ]}
+      />
 
-      <section className="mt-6 grid gap-6 lg:grid-cols-5">
-        <div className="space-y-4 lg:col-span-2">
+      <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="space-y-4">
           <article className="surface-card p-5">
-            <h2 className="text-lg font-semibold text-zinc-900">Support Channels</h2>
-            <div className="mt-3 space-y-2 text-sm text-zinc-700">
-              <p><strong>Email:</strong> support@myshop.com</p>
-              <p><strong>Phone:</strong> 1-800-MYSHOP-1</p>
-              <p><strong>Hours:</strong> Monday-Friday, 9am-6pm EST</p>
-            </div>
-          </article>
-
-          <article className="surface-card p-5">
-            <h2 className="text-lg font-semibold text-zinc-900">What To Include</h2>
-            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-700">
+            <h2 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">What to include</h2>
+            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-muted">
               <li>Your full name and preferred reply email</li>
-              <li>Order number (if your question is order-related)</li>
-              <li>A clear description of the issue</li>
+              <li>Order number if your question is order-related</li>
+              <li>A short description of what you need help with</li>
             </ul>
           </article>
 
           <article className="surface-card p-5">
-            <h2 className="text-lg font-semibold text-zinc-900">Response Time</h2>
-            <p className="mt-2 text-sm text-zinc-700">
-              Typical response time is under 24 business hours.
-            </p>
+            <h2 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">Best reasons to contact us</h2>
+            <div className="mt-4 grid gap-3">
+              <div className="surface-soft px-4 py-3 text-sm text-zinc-700 dark:text-slate-200">Order support and delivery updates</div>
+              <div className="surface-soft px-4 py-3 text-sm text-zinc-700 dark:text-slate-200">Returns, exchanges, and refunds</div>
+              <div className="surface-soft px-4 py-3 text-sm text-zinc-700 dark:text-slate-200">Account access and verification help</div>
+            </div>
           </article>
         </div>
 
-        <div className="surface-card p-6 lg:col-span-3">
-          <h2 className="text-xl font-semibold text-zinc-900">Send Us A Message</h2>
-          <form className="mt-4 space-y-4">
+        <section className="surface-card p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">Send us a message</h2>
+          <form className="mt-5 space-y-4">
             <div>
-              <label htmlFor="contact-name" className="block text-sm font-semibold">Name</label>
-              <input
-                id="contact-name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                className="focus-ring mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
-              />
+              <label htmlFor="contact-name" className="block text-sm font-semibold text-zinc-900 dark:text-white">
+                Name
+              </label>
+              <input id="contact-name" name="name" type="text" autoComplete="name" className="input-control focus-ring mt-2 px-4 py-3 text-sm" />
             </div>
             <div>
-              <label htmlFor="contact-email" className="block text-sm font-semibold">Email</label>
-              <input
-                id="contact-email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                className="focus-ring mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
-              />
+              <label htmlFor="contact-email" className="block text-sm font-semibold text-zinc-900 dark:text-white">
+                Email
+              </label>
+              <input id="contact-email" name="email" type="email" autoComplete="email" className="input-control focus-ring mt-2 px-4 py-3 text-sm" />
             </div>
             <div>
-              <label htmlFor="contact-message" className="block text-sm font-semibold">Message</label>
-              <textarea
-                id="contact-message"
-                name="message"
-                rows={6}
-                className="focus-ring mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
-              ></textarea>
+              <label htmlFor="contact-message" className="block text-sm font-semibold text-zinc-900 dark:text-white">
+                Message
+              </label>
+              <textarea id="contact-message" name="message" rows={6} className="input-control focus-ring mt-2 px-4 py-3 text-sm" />
             </div>
-            <button className="btn-primary px-5 py-2.5 text-sm font-semibold">Send Message</button>
+            <button className="btn-primary focus-ring px-5 py-3 text-sm font-semibold">Send message</button>
           </form>
-        </div>
+        </section>
       </section>
     </div>
   );
