@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
+import { AuthNotice, AuthShell } from "../../components/AuthShell";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -61,86 +62,100 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="mx-auto max-w-xl pt-20">
-      <section className="surface-card rounded-2xl p-8">
-        <h1 className="text-2xl font-semibold text-zinc-900">Sign In</h1>
-        <p className="mt-2 text-sm text-zinc-600">Access your account, orders, and saved details.</p>
+    <AuthShell
+      eyebrow="Sign in"
+      title="Welcome back to MyShop"
+      description="Access your account, review orders, and continue shopping with a calmer, more guided sign-in flow."
+      supportLabel="Need help before you sign in?"
+      supportHref="/contact"
+      supportText="Contact support"
+    >
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Account access</p>
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">Sign in to continue</h2>
+      <p className="mt-3 text-sm leading-7 text-muted">
+        Use the email address you registered with. If your password or verification status needs attention, we&apos;ll guide you from here.
+      </p>
 
-        {error && (
-          <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-            {error}
-          </div>
-        )}
-        {notice && (
-          <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            {notice}
-          </div>
-        )}
+      <div className="mt-6 space-y-4">
+        {error && <AuthNotice tone="error">{error}</AuthNotice>}
+        {notice && <AuthNotice tone="success">{notice}</AuthNotice>}
         {previewUrl && (
-          <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            Email delivery is not configured here yet. Use{" "}
+          <AuthNotice tone="warning">
+            Email delivery isn&apos;t configured here yet. Use{" "}
             <a href={previewUrl} className="font-semibold underline underline-offset-2">
               this link
             </a>
             .
-          </div>
+          </AuthNotice>
         )}
+      </div>
 
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="login-email" className="block text-sm font-semibold text-zinc-900 dark:text-white">
+            Email address
+          </label>
           <input
+            id="login-email"
             type="email"
             autoComplete="email"
             required
-            placeholder="Email address"
-            className="focus-ring w-full rounded-lg border border-zinc-300 px-4 py-2"
+            placeholder="you@example.com"
+            className="input-control focus-ring mt-2 px-4 py-3 text-sm"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
-          <input
-            type="password"
-            autoComplete="current-password"
-            required
-            placeholder="Password"
-            className="focus-ring w-full rounded-lg border border-zinc-300 px-4 py-2"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <div className="flex items-center justify-between gap-3 text-sm">
-            <span className="text-zinc-500">Use the email you registered with.</span>
-            <Link href="/forgot-password" className="font-semibold text-sky-700 hover:text-sky-900">
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <label htmlFor="login-password" className="block text-sm font-semibold text-zinc-900 dark:text-white">
+              Password
+            </label>
+            <Link href="/forgot-password" className="text-sm font-semibold text-[var(--brand-600)] hover:text-[var(--brand-700)]">
               Forgot password?
             </Link>
           </div>
+          <input
+            id="login-password"
+            type="password"
+            autoComplete="current-password"
+            required
+            placeholder="Enter your password"
+            className="input-control focus-ring mt-2 px-4 py-3 text-sm"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </div>
 
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="btn-primary focus-ring w-full px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {isSubmitting ? "Signing in..." : "Sign In"}
+        </button>
+      </form>
+
+      {requiresVerification && (
+        <div className="mt-5 flex flex-wrap items-center gap-3">
           <button
-            type="submit"
-            disabled={isSubmitting}
-            className="btn-primary w-full rounded-lg px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-70"
+            type="button"
+            onClick={handleResendVerification}
+            disabled={isResending || !email.trim()}
+            className="btn-outline focus-ring px-4 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {isSubmitting ? "Signing in..." : "Sign In"}
+            {isResending ? "Sending..." : "Resend verification email"}
           </button>
-        </form>
+        </div>
+      )}
 
-        {requiresVerification && (
-          <div className="mt-5 flex flex-wrap items-center gap-3 text-sm">
-            <button
-              type="button"
-              onClick={handleResendVerification}
-              disabled={isResending || !email.trim()}
-              className="btn-outline rounded-lg px-4 py-2 disabled:cursor-not-allowed disabled:opacity-70"
-            >
-              {isResending ? "Sending..." : "Resend verification email"}
-            </button>
-          </div>
-        )}
-
-        <p className="mt-5 text-sm text-zinc-600">
-          New here?{" "}
-          <Link href="/register" className="font-semibold text-sky-700 hover:text-sky-900">
-            Create an account
-          </Link>
-        </p>
-      </section>
-    </div>
+      <p className="mt-6 text-sm text-muted">
+        New here?{" "}
+        <Link href="/register" className="font-semibold text-[var(--brand-600)] hover:text-[var(--brand-700)]">
+          Create an account
+        </Link>
+      </p>
+    </AuthShell>
   );
 }

@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { AuthNotice, AuthShell } from "../../components/AuthShell";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = React.useState("");
@@ -38,58 +39,66 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="mx-auto max-w-xl pt-20">
-      <section className="surface-card rounded-2xl p-8">
-        <h1 className="text-2xl font-semibold text-zinc-900">Reset Your Password</h1>
-        <p className="mt-2 text-sm text-zinc-600">Enter your email and we will send you a reset link.</p>
+    <AuthShell
+      eyebrow="Password recovery"
+      title="Reset your password calmly"
+      description="Enter your email and we’ll guide you back into your account with a secure reset link."
+      supportLabel="Remembered your password?"
+      supportHref="/login"
+      supportText="Go back to sign in"
+    >
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Account recovery</p>
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">Send a reset link</h2>
+      <p className="mt-3 text-sm leading-7 text-muted">
+        We’ll email you a secure link if an account exists for that address, so you can choose a new password safely.
+      </p>
 
-        {error && (
-          <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-            {error}
-          </div>
-        )}
-        {message && (
-          <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            {message}
-          </div>
-        )}
+      <div className="mt-6 space-y-4">
+        {error && <AuthNotice tone="error">{error}</AuthNotice>}
+        {message && <AuthNotice tone="success">{message}</AuthNotice>}
         {previewUrl && (
-          <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            Email delivery is not configured here yet. Use{" "}
+          <AuthNotice tone="warning">
+            Email delivery isn&apos;t configured here yet. Use{" "}
             <a href={previewUrl} className="font-semibold underline underline-offset-2">
               this reset link
             </a>
             .
-          </div>
+          </AuthNotice>
         )}
+      </div>
 
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="forgot-email" className="block text-sm font-semibold text-zinc-900 dark:text-white">
+            Email address
+          </label>
           <input
+            id="forgot-email"
             type="email"
             autoComplete="email"
             required
-            placeholder="Email address"
-            className="focus-ring w-full rounded-lg border border-zinc-300 px-4 py-2"
+            placeholder="you@example.com"
+            className="input-control focus-ring mt-2 px-4 py-3 text-sm"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
+        </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="btn-primary w-full rounded-lg px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {isSubmitting ? "Sending..." : "Send Reset Link"}
-          </button>
-        </form>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="btn-primary focus-ring w-full px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {isSubmitting ? "Sending..." : "Send reset link"}
+        </button>
+      </form>
 
-        <p className="mt-5 text-sm text-zinc-600">
-          Remembered your password?{" "}
-          <Link href="/login" className="font-semibold text-sky-700 hover:text-sky-900">
-            Back to sign in
-          </Link>
-        </p>
-      </section>
-    </div>
+      <p className="mt-6 text-sm text-muted">
+        Need to sign in instead?{" "}
+        <Link href="/login" className="font-semibold text-[var(--brand-600)] hover:text-[var(--brand-700)]">
+          Back to sign in
+        </Link>
+      </p>
+    </AuthShell>
   );
 }

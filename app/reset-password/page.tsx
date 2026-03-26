@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { AuthNotice, AuthShell } from "../../components/AuthShell";
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
@@ -37,56 +38,61 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="mx-auto max-w-xl pt-20">
-      <section className="surface-card rounded-2xl p-8">
-        <h1 className="text-2xl font-semibold text-zinc-900">Choose a New Password</h1>
-        <p className="mt-2 text-sm text-zinc-600">Set a new password for your account.</p>
+    <AuthShell
+      eyebrow="Choose a new password"
+      title="Set a fresh password for your account"
+      description="Use the secure reset link you received to create a new password and get back into your account."
+      supportLabel="Need to restart the flow?"
+      supportHref="/forgot-password"
+      supportText="Request another reset link"
+    >
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Reset password</p>
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">Create your new password</h2>
+      <p className="mt-3 text-sm leading-7 text-muted">
+        Pick a new password with at least 8 characters. Once updated, you’ll be able to sign in with it immediately.
+      </p>
 
-        {!token && (
-          <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-            This password reset link is missing a token.
-          </div>
-        )}
-        {error && (
-          <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            Password updated. You can sign in with your new password now.
-          </div>
-        )}
+      <div className="mt-6 space-y-4">
+        {!token && <AuthNotice tone="error">This password reset link is missing a token.</AuthNotice>}
+        {error && <AuthNotice tone="error">{error}</AuthNotice>}
+        {success && <AuthNotice tone="success">Password updated. You can sign in with your new password now.</AuthNotice>}
+      </div>
 
-        {!success && (
-          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+      {!success && (
+        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="reset-password" className="block text-sm font-semibold text-zinc-900 dark:text-white">
+              New password
+            </label>
             <input
+              id="reset-password"
               type="password"
               autoComplete="new-password"
               required
               minLength={8}
-              placeholder="New password (min 8 chars)"
-              className="focus-ring w-full rounded-lg border border-zinc-300 px-4 py-2"
+              placeholder="At least 8 characters"
+              className="input-control focus-ring mt-2 px-4 py-3 text-sm"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
+          </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting || !token}
-              className="btn-primary w-full rounded-lg px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-70"
-            >
-              {isSubmitting ? "Updating..." : "Update Password"}
-            </button>
-          </form>
-        )}
+          <button
+            type="submit"
+            disabled={isSubmitting || !token}
+            className="btn-primary focus-ring w-full px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {isSubmitting ? "Updating..." : "Update password"}
+          </button>
+        </form>
+      )}
 
-        <p className="mt-5 text-sm text-zinc-600">
-          <Link href="/login" className="font-semibold text-sky-700 hover:text-sky-900">
-            Back to sign in
-          </Link>
-        </p>
-      </section>
-    </div>
+      <p className="mt-6 text-sm text-muted">
+        Ready to sign in?{" "}
+        <Link href="/login" className="font-semibold text-[var(--brand-600)] hover:text-[var(--brand-700)]">
+          Back to sign in
+        </Link>
+      </p>
+    </AuthShell>
   );
 }

@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { AuthNotice, AuthShell } from "../../components/AuthShell";
 
 type VerificationState = "idle" | "verifying" | "success" | "error";
 
@@ -57,33 +58,35 @@ export default function VerifyEmailPage() {
   }, [token]);
 
   return (
-    <div className="mx-auto max-w-xl pt-20">
-      <section className="surface-card rounded-2xl p-8">
-        <h1 className="text-2xl font-semibold text-zinc-900">Verify Your Email</h1>
+    <AuthShell
+      eyebrow="Email verification"
+      title="Confirm your email and finish setup"
+      description="We’re validating your email so your account can be trusted for sign-in, order updates, and account recovery."
+      supportLabel="Need a new account instead?"
+      supportHref="/register"
+      supportText="Create account"
+    >
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Verification status</p>
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">Checking your verification link</h2>
 
+      <div className="mt-6 space-y-4">
         {state === "verifying" && (
-          <p className="mt-4 text-sm text-zinc-600">We are verifying your email now.</p>
+          <AuthNotice tone="info">We&apos;re verifying your email now. This should only take a moment.</AuthNotice>
         )}
         {state === "success" && (
-          <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            Email verified. Redirecting you to your account.
-          </div>
+          <AuthNotice tone="success">Email verified. Redirecting you to your account.</AuthNotice>
         )}
-        {state === "error" && error && (
-          <div className="mt-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-            {error}
-          </div>
-        )}
+        {state === "error" && error && <AuthNotice tone="error">{error}</AuthNotice>}
+      </div>
 
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link href="/login" className="btn-primary rounded-lg px-4 py-2 text-sm font-semibold">
-            Go to Sign In
-          </Link>
-          <Link href="/register" className="btn-outline rounded-lg px-4 py-2 text-sm">
-            Create Account
-          </Link>
-        </div>
-      </section>
-    </div>
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Link href="/login" className="btn-primary focus-ring px-5 py-3 text-sm font-semibold">
+          Go to sign in
+        </Link>
+        <Link href="/register" className="btn-outline focus-ring px-5 py-3 text-sm font-semibold">
+          Create account
+        </Link>
+      </div>
+    </AuthShell>
   );
 }
