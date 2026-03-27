@@ -320,6 +320,22 @@ For every implemented screen:
 
 - [ ] Align secondary/supporting pages
 
+### Milestone 7
+
+- [ ] Clean up remaining old-style storefront holdouts
+- [ ] Refresh loading, confirmation, and supporting rails
+- [ ] Run storefront consistency QA
+
+### Milestone 8
+
+- [ ] Finalize dark background direction from Figma
+- [ ] Refresh global background tokens
+- [ ] Update body/app shell background treatment
+- [ ] Tune card and surface contrast
+- [ ] Align hero and page-shell backgrounds
+- [ ] Recheck checkout/auth readability on dark surfaces
+- [ ] Run contrast and responsive QA on the new background system
+
 ---
 
 ## Definition of Done
@@ -345,4 +361,3 @@ Start with this exact engineering sequence:
 5. Rebuild home page
 
 That gives the biggest visible improvement early and creates a better foundation for the rest of the redesign.
-
