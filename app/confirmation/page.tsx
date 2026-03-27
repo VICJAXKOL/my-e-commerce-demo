@@ -32,7 +32,6 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
   const paymentStatus = payment?.transactionStatus?.toLowerCase() ?? "";
   const isPaymentVerifiedAsPaid = paymentStatus === "success";
 
-  // Webhook updates can lag behind the browser redirect; reconcile order state on page load.
   if (reference && isPaymentVerifiedAsPaid) {
     await markOrderPaid(reference);
   }
@@ -57,69 +56,116 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
       : dbOrder?.shippingMethod === "standard"
         ? "3-5"
         : payment?.shippingMethod === "express"
-      ? "2-3"
-      : payment?.shippingMethod === "standard"
-        ? "3-5"
-        : (readParam(resolved.eta) ?? "3-5");
+          ? "2-3"
+          : payment?.shippingMethod === "standard"
+            ? "3-5"
+            : (readParam(resolved.eta) ?? "3-5");
 
-  const now = new Date();
-  const orderDate = now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const orderDate = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   const formattedTotal = formatNgn(totalValue);
+  const statusTone = wasCanceled
+    ? {
+        eyebrow: "Order update",
+        title: "Your payment was not completed",
+        description: "We saved your order details, but payment did not go through. You can review the order and try again when you're ready.",
+        badge: "bg-amber-500/15 text-amber-200 ring-1 ring-amber-300/30",
+      }
+    : {
+        eyebrow: "Order complete",
+        title: isPaid ? "Order confirmed" : "Order received",
+        description: isPaid
+          ? "Thank you for your purchase. Your confirmation and delivery details are on the way."
+          : "We received your order details and are reconciling payment. Confirmation will follow shortly.",
+        badge: "bg-emerald-500/15 text-emerald-100 ring-1 ring-emerald-300/30",
+      };
+  const nextSteps = wasCanceled
+    ? [
+        "Return to your cart to confirm items and delivery details.",
+        "Retry checkout when you're ready to complete payment.",
+        "Contact support if you were charged but the order stayed pending.",
+      ]
+    : [
+        "Order confirmation has been sent to your email.",
+        "Shipping updates and tracking details will follow.",
+        "Support is available if you need to update delivery details.",
+      ];
 
   return (
-    <div className="mx-auto max-w-3xl pt-20">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 pb-10 pt-20 sm:px-6">
       <ClearCartOnLoad enabled={shouldClearCart || isPaid} />
-      <section className="rounded-2xl bg-gradient-to-br from-emerald-700 via-emerald-600 to-emerald-700 p-8 text-white shadow-lg">
-        <p className="text-xs uppercase tracking-widest text-emerald-100">Order Complete</p>
-        <h1 className="mt-2 text-3xl font-semibold">Order Confirmed</h1>
-        <p className="mt-2 text-sm text-emerald-50">
-          Thank you for your purchase. A confirmation email has been sent with your order details.
-        </p>
-        {payment?.reference ? (
-          <p className="mt-2 text-xs text-emerald-100">Paystack reference: {payment.reference}</p>
-        ) : null}
+
+      <section className="surface-card overflow-hidden p-6 sm:p-8">
+        <div className="rounded-[1.5rem] bg-[linear-gradient(135deg,var(--surface-invert),color-mix(in_srgb,var(--surface-invert)_72%,var(--brand-700)))] p-6 text-white shadow-[var(--shadow-card-hover)] sm:p-8">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="max-w-2xl">
+              <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${statusTone.badge}`}>
+                {statusTone.eyebrow}
+              </span>
+              <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">{statusTone.title}</h1>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-200 sm:text-base">{statusTone.description}</p>
+              {payment?.reference ? <p className="mt-4 text-xs text-slate-300">Paystack reference: {payment.reference}</p> : null}
+            </div>
+
+            <div className="min-w-[14rem] rounded-[1.25rem] bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">Order summary</p>
+              <p className="mt-3 text-2xl font-semibold">{formattedTotal}</p>
+              <p className="mt-1 text-sm text-slate-300">Estimated delivery in {eta} business days</p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="surface-card mt-6 rounded-2xl p-6">
-        <div className="grid gap-3 text-sm sm:grid-cols-2">
-          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
-            <p className="text-zinc-500">Order Number</p>
-            <p className="font-semibold text-zinc-900">{order}</p>
-          </div>
-          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
-            <p className="text-zinc-500">Order Date</p>
-            <p className="font-semibold text-zinc-900">{orderDate}</p>
-          </div>
-          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
-            <p className="text-zinc-500">Estimated Delivery</p>
-            <p className="font-semibold text-zinc-900">{eta} business days</p>
-          </div>
-          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
-            <p className="text-zinc-500">Total Paid</p>
-            <p className="font-semibold text-zinc-900">{formattedTotal}</p>
+      <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="surface-card p-6 sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Purchase details</p>
+          <div className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
+            <div className="surface-soft p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Order number</p>
+              <p className="mt-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">{order}</p>
+            </div>
+            <div className="surface-soft p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Order date</p>
+              <p className="mt-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">{orderDate}</p>
+            </div>
+            <div className="surface-soft p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Estimated delivery</p>
+              <p className="mt-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">{eta} business days</p>
+            </div>
+            <div className="surface-soft p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">{wasCanceled ? "Order value" : "Total paid"}</p>
+              <p className="mt-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">{formattedTotal}</p>
+            </div>
           </div>
         </div>
 
-        <div className="mt-6 rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700">
-          <h2 className="font-semibold text-zinc-900">What Happens Next</h2>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
-            <li>Order confirmation has been sent to your email</li>
-            <li>Shipping updates and tracking details will follow</li>
-            <li>Support is available if you need to update details</li>
-          </ul>
-        </div>
+        <section className="surface-card p-6 sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">What happens next</p>
+          <div className="mt-5 space-y-3">
+            {nextSteps.map((step) => (
+              <div key={step} className="surface-soft flex gap-3 p-4 text-sm leading-6 text-zinc-700 dark:text-slate-200">
+                <span className="mt-1 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--brand-500),var(--brand-600))] text-xs font-semibold text-white">
+                  ✓
+                </span>
+                <span>{step}</span>
+              </div>
+            ))}
+          </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <Link href={`/track?order=${encodeURIComponent(order)}`} className="btn-primary rounded-md px-4 py-2.5 text-center text-sm font-semibold">
-            Track Order
-          </Link>
-          <Link href="/orders" className="btn-outline rounded-md px-4 py-2.5 text-center text-sm">
-            View Orders
-          </Link>
-          <Link href="/products" className="btn-outline rounded-md px-4 py-2.5 text-center text-sm">
-            Continue Shopping
-          </Link>
-        </div>
+          <div className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <Link
+              href={`/track?order=${encodeURIComponent(order)}`}
+              className="btn-primary focus-ring px-4 py-3 text-center text-sm font-semibold"
+            >
+              Track Order
+            </Link>
+            <Link href="/orders" className="btn-outline focus-ring px-4 py-3 text-center text-sm font-semibold">
+              View Orders
+            </Link>
+            <Link href="/products" className="btn-outline focus-ring px-4 py-3 text-center text-sm font-semibold">
+              Continue Shopping
+            </Link>
+          </div>
+        </section>
       </section>
     </div>
   );

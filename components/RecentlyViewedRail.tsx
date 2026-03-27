@@ -33,13 +33,13 @@ function writeSnapshot(next: string[]) {
   try {
     localStorage.setItem(STORAGE_KEY, rawCache);
   } catch {}
-  listeners.forEach((l) => l());
+  listeners.forEach((listener) => listener());
 }
 
 function subscribe(listener: () => void) {
   listeners.add(listener);
-  const onStorage = (e: StorageEvent) => {
-    if (e.key === STORAGE_KEY) listener();
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) listener();
   };
   window.addEventListener("storage", onStorage);
   return () => {
@@ -59,29 +59,35 @@ export function RecentlyViewedRail({ currentId }: { currentId: string }) {
   const products = ids
     .filter((id) => id !== currentId)
     .map((id) => getProductById(id))
-    .filter((p): p is NonNullable<ReturnType<typeof getProductById>> => Boolean(p))
+    .filter((product): product is NonNullable<ReturnType<typeof getProductById>> => Boolean(product))
     .slice(0, 4);
 
   if (products.length === 0) return null;
 
   return (
-    <section className="mt-8">
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-zinc-900">Recently Viewed</h2>
-        <Link href="/products" className="text-sm text-zinc-600 hover:text-zinc-900">
+    <section className="surface-card mt-8 p-5 sm:p-6">
+      <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Keep browsing</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">Recently viewed</h2>
+          <p className="mt-2 text-sm leading-6 text-muted">Jump back into items you checked earlier without searching again.</p>
+        </div>
+        <Link href="/products" className="btn-ghost focus-ring w-fit px-3 py-2 text-sm font-semibold text-[var(--brand-600)]">
           Browse all
         </Link>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {products.map((p) => (
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {products.map((product) => (
           <Link
-            key={p.id}
-            href={`/products/${p.id}`}
-            className="rounded-xl border border-zinc-200 bg-white p-3 transition hover:border-zinc-300 hover:shadow-sm"
+            key={product.id}
+            href={`/products/${product.id}`}
+            className="surface-soft p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]"
           >
-            <p className="line-clamp-1 text-sm font-semibold text-zinc-900">{p.name}</p>
-            <p className="mt-1 text-xs text-zinc-500">{p.category}</p>
-            <p className="mt-2 text-sm font-medium text-zinc-800">{formatNgn(p.price)}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">{product.category}</p>
+            <p className="mt-2 line-clamp-2 text-base font-semibold tracking-tight text-zinc-900 dark:text-white">{product.name}</p>
+            <p className="mt-4 text-sm font-semibold text-zinc-900 dark:text-white">{formatNgn(product.price)}</p>
+            <p className="mt-2 text-sm text-[var(--brand-600)]">View product →</p>
           </Link>
         ))}
       </div>

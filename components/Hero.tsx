@@ -25,10 +25,10 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col items-center gap-3">
-          <Link href="/products" className="btn-primary inline-flex items-center justify-center px-8 py-3 font-semibold">
+          <Link href="/products" className="btn-primary focus-ring inline-flex items-center justify-center px-8 py-3 font-semibold">
             Shop Now
           </Link>
-          <Link href="/categories" className="btn-outline inline-flex items-center justify-center px-8 py-3 font-semibold text-slate-100">
+          <Link href="/categories" className="btn-outline focus-ring inline-flex items-center justify-center px-8 py-3 font-semibold text-slate-100">
             Browse Categories
           </Link>
         </div>
