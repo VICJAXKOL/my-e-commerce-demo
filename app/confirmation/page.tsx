@@ -38,7 +38,7 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
 
   const dbOrder = reference ? await getOrderByReference(reference) : null;
   const isPaid = dbOrder?.status === "paid" || isPaymentVerifiedAsPaid || isSuccessStatus;
-  const shouldClearCart = !wasCanceled && (Boolean(reference) || isSuccessStatus);
+  const shouldClearCart = isPaid || (!wasCanceled && isSuccessStatus);
 
   const order =
     dbOrder?.orderNumber ??

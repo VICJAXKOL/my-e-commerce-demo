@@ -164,13 +164,21 @@ export default function CheckoutPage() {
       </section>
 
       {wasCanceled && (
-        <section className="rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-800">
-          Payment was canceled. Your cart is still available, so you can pick up where you left off.
+        <section
+          role="status"
+          aria-live="polite"
+          className="rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-800"
+        >
+          Payment was canceled. Your cart is still available, so you can review the summary below and try again when you&apos;re ready.
         </section>
       )}
 
       {paymentError && (
-        <section className="rounded-2xl border border-rose-300 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+        <section
+          role="alert"
+          aria-live="assertive"
+          className="rounded-2xl border border-rose-300 bg-rose-50 px-5 py-4 text-sm text-rose-700"
+        >
           {paymentError}
         </section>
       )}
@@ -332,7 +340,7 @@ export default function CheckoutPage() {
         </div>
 
         <aside className="space-y-4 xl:sticky xl:top-24">
-          <section className="surface-card p-6 sm:p-7">
+          <section id="payment-summary" className="surface-card p-6 sm:p-7">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Order summary</p>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">What you’re paying today</h2>
 
