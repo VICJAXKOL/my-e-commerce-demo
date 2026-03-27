@@ -24,16 +24,16 @@ export default function Hero() {
           Browse a modern storefront designed for fast discovery, trusted quality, and smooth checkout.
         </p>
 
-        <div className="flex flex-col items-center gap-3">
-          <Link href="/products" className="btn-primary focus-ring inline-flex items-center justify-center px-8 py-3 font-semibold">
+        <div className="flex w-full flex-col items-center gap-3 sm:w-auto">
+          <Link href="/products" className="btn-primary focus-ring inline-flex w-full items-center justify-center px-6 py-3 font-semibold sm:w-auto sm:px-8">
             Shop Now
           </Link>
-          <Link href="/categories" className="btn-outline focus-ring inline-flex items-center justify-center px-8 py-3 font-semibold text-slate-100">
+          <Link href="/categories" className="btn-outline focus-ring inline-flex w-full items-center justify-center px-6 py-3 font-semibold text-slate-100 sm:w-auto sm:px-8">
             Browse Categories
           </Link>
         </div>
 
-        <div className="mt-16 grid grid-cols-3 gap-8 sm:gap-12">
+        <div className="mt-12 grid gap-4 text-left sm:mt-16 sm:grid-cols-3 sm:gap-8 lg:gap-12">
           <div className="border-l border-slate-700 pl-6 text-left">
             <div className="text-3xl font-bold text-cyan-300">32+</div>
             <p className="text-sm text-slate-400">Premium Products</p>

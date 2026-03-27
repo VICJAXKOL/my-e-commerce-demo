@@ -16,7 +16,7 @@ const categories = [
 
 export default function CategoriesPage() {
   return (
-    <div className="mx-auto max-w-6xl space-y-8 pt-20">
+    <div className="mx-auto max-w-6xl space-y-8 px-4 pt-20 sm:px-6">
       <PageIntro
         eyebrow="Categories"
         title="Shop the catalog by collection"

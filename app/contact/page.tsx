@@ -2,7 +2,7 @@ import PageIntro from "../../components/PageIntro";
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 pt-20 sm:px-6">
       <PageIntro
         eyebrow="Contact support"
         title="We’re here to help with orders, returns, and account issues"

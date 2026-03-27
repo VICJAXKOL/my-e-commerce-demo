@@ -10,7 +10,7 @@ export default function AccountPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl pt-20">
+      <div className="mx-auto max-w-6xl px-4 pt-20 sm:px-6">
         <section className="surface-card p-8 text-center text-sm text-muted">Loading account...</section>
       </div>
     );
@@ -18,7 +18,7 @@ export default function AccountPage() {
 
   if (!user) {
     return (
-      <div className="mx-auto max-w-6xl space-y-6 pt-20">
+      <div className="mx-auto max-w-6xl space-y-6 px-4 pt-20 sm:px-6">
         <PageIntro
           eyebrow="Account"
           title="Sign in to access your account"
@@ -44,7 +44,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 pt-20 sm:px-6">
       <PageIntro
         eyebrow="My account"
         title="Welcome back"

@@ -3,7 +3,7 @@ import PageIntro from "../../components/PageIntro";
 
 export default function WishlistPage() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 pt-20 sm:px-6">
       <PageIntro
         eyebrow="Saved for later"
         title="Keep track of products you don’t want to lose"

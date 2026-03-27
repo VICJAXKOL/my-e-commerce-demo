@@ -30,7 +30,7 @@ export default function FAQPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 pt-20 sm:px-6">
       <PageIntro
         eyebrow="Support center"
         title="Quick answers for common shopping questions"

@@ -106,7 +106,7 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
               {payment?.reference ? <p className="mt-4 text-xs text-slate-300">Paystack reference: {payment.reference}</p> : null}
             </div>
 
-            <div className="min-w-[14rem] rounded-[1.25rem] bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur">
+            <div className="w-full rounded-[1.25rem] bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur sm:w-auto sm:min-w-[14rem]">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">Order summary</p>
               <p className="mt-3 text-2xl font-semibold">{formattedTotal}</p>
               <p className="mt-1 text-sm text-slate-300">Estimated delivery in {eta} business days</p>

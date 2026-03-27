@@ -2,7 +2,7 @@ import CartClient from "../../components/CartClient";
 
 export default function CartPage() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 pt-20 sm:px-6">
       <section className="surface-card overflow-hidden p-6 sm:p-8">
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
           <div>

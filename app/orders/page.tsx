@@ -50,7 +50,7 @@ export default function OrdersPage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 pt-20">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 pt-20 sm:px-6">
       <PageIntro
         eyebrow="Order center"
         title="Review your recent purchases"
