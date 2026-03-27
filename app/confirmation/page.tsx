@@ -97,16 +97,21 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
       <section className="surface-card overflow-hidden p-6 sm:p-8">
         <div className="rounded-[1.5rem] bg-[linear-gradient(135deg,var(--surface-invert),color-mix(in_srgb,var(--surface-invert)_72%,var(--brand-700)))] p-6 text-white shadow-[var(--shadow-card-hover)] sm:p-8">
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
-            <div className="min-w-0">
+            <div className="min-w-0 space-y-4">
               <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${statusTone.badge}`}>
                 {statusTone.eyebrow}
               </span>
-              <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">{statusTone.title}</h1>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-200 sm:text-base">{statusTone.description}</p>
-              {payment?.reference ? <p className="mt-4 text-xs text-slate-300">Paystack reference: {payment.reference}</p> : null}
+              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{statusTone.title}</h1>
+              <p className="max-w-2xl text-sm leading-7 text-slate-200 sm:text-base">{statusTone.description}</p>
+              {payment?.reference ? (
+                <div className="max-w-2xl rounded-2xl bg-white/5 px-4 py-3 ring-1 ring-white/10">
+                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-slate-300">Paystack reference</p>
+                  <p className="mt-2 break-all text-sm text-slate-100">{payment.reference}</p>
+                </div>
+              ) : null}
             </div>
 
-            <div className="w-full rounded-[1.25rem] bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur">
+            <div className="w-full self-start rounded-[1.25rem] bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">Order summary</p>
               <p className="mt-3 text-2xl font-semibold">{formattedTotal}</p>
               <p className="mt-1 text-sm text-slate-300">Estimated delivery in {eta} business days</p>
