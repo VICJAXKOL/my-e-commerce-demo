@@ -299,6 +299,7 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 onClick={() => setShippingMethod("standard")}
+                aria-pressed={shippingMethod === "standard"}
                 className={`focus-ring rounded-2xl border p-4 text-left transition ${
                   shippingMethod === "standard"
                     ? "border-[var(--brand-500)] bg-[color:color-mix(in_srgb,var(--brand-500)_10%,white)]"
@@ -312,6 +313,7 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 onClick={() => setShippingMethod("express")}
+                aria-pressed={shippingMethod === "express"}
                 className={`focus-ring rounded-2xl border p-4 text-left transition ${
                   shippingMethod === "express"
                     ? "border-[var(--brand-500)] bg-[color:color-mix(in_srgb,var(--brand-500)_10%,white)]"

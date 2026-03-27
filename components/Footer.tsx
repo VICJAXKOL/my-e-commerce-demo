@@ -77,6 +77,9 @@ export default function Footer() {
             <p className="mt-4 text-sm leading-6 text-slate-300">
               Get product drops, offers, and useful store updates without the noise.
             </p>
+            <label htmlFor="newsletter-email" className="sr-only">
+              Email address
+            </label>
             <input
               id="newsletter-email"
               name="newsletterEmail"
@@ -85,7 +88,9 @@ export default function Footer() {
               autoComplete="email"
               className="input-control focus-ring mt-4 border-white/10 bg-white/5 px-4 py-3 text-sm text-white shadow-none placeholder:text-slate-400"
             />
-            <button className="btn-primary mt-3 w-full px-4 py-3 text-sm font-semibold">Subscribe</button>
+            <button type="button" className="btn-primary focus-ring mt-3 w-full px-4 py-3 text-sm font-semibold">
+              Subscribe
+            </button>
             <div className="mt-6">
               <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-200">Company</h4>
               <ul className="mt-4 space-y-3 text-sm text-slate-300">
@@ -95,14 +100,10 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <a href="#" className="transition hover:text-white">
-                    Blog
-                  </a>
+                  <span className="text-slate-500">Blog (coming soon)</span>
                 </li>
                 <li>
-                  <a href="#" className="transition hover:text-white">
-                    Careers
-                  </a>
+                  <span className="text-slate-500">Careers (coming soon)</span>
                 </li>
               </ul>
             </div>

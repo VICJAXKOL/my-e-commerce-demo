@@ -106,6 +106,7 @@ export default function ShowcaseSlider() {
                 key={slide.title}
                 type="button"
                 onClick={() => setIndex(slideIndex)}
+                aria-pressed={slideIndex === index}
                 className={`h-2.5 rounded-full transition-all ${
                   slideIndex === index
                     ? "w-8 bg-[var(--brand-600)]"

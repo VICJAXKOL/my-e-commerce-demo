@@ -49,7 +49,9 @@ export default function FAQPage() {
             <div className="mt-4 space-y-3">
               {section.items.map((faq) => (
                 <details key={faq.q} className="surface-soft rounded-2xl p-4">
-                  <summary className="cursor-pointer text-sm font-semibold text-zinc-900 dark:text-white">{faq.q}</summary>
+                  <summary className="focus-ring cursor-pointer rounded-xl text-sm font-semibold text-zinc-900 dark:text-white">
+                    {faq.q}
+                  </summary>
                   <p className="mt-3 text-sm leading-7 text-muted">{faq.a}</p>
                 </details>
               ))}

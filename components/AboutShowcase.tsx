@@ -85,6 +85,7 @@ export default function AboutShowcase() {
                 type="button"
                 onClick={() => setActive(index)}
                 aria-label={`Go to slide ${index + 1}`}
+                aria-pressed={index === active}
                 className={`h-2.5 rounded-full transition-all ${
                   index === active ? "w-8 bg-[var(--brand-600)]" : "w-2.5 bg-zinc-300 hover:bg-zinc-400"
                 }`}

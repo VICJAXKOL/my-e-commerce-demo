@@ -37,26 +37,51 @@ export default function ContactPage() {
 
         <section className="surface-card p-6 sm:p-8">
           <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">Send us a message</h2>
+          <p id="contact-help" className="mt-2 text-sm leading-6 text-muted">
+            Share your contact details and a short message so the support team can respond clearly.
+          </p>
           <form className="mt-5 space-y-4">
             <div>
               <label htmlFor="contact-name" className="block text-sm font-semibold text-zinc-900 dark:text-white">
                 Name
               </label>
-              <input id="contact-name" name="name" type="text" autoComplete="name" className="input-control focus-ring mt-2 px-4 py-3 text-sm" />
+              <input
+                id="contact-name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                aria-describedby="contact-help"
+                className="input-control focus-ring mt-2 px-4 py-3 text-sm"
+              />
             </div>
             <div>
               <label htmlFor="contact-email" className="block text-sm font-semibold text-zinc-900 dark:text-white">
                 Email
               </label>
-              <input id="contact-email" name="email" type="email" autoComplete="email" className="input-control focus-ring mt-2 px-4 py-3 text-sm" />
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                aria-describedby="contact-help"
+                className="input-control focus-ring mt-2 px-4 py-3 text-sm"
+              />
             </div>
             <div>
               <label htmlFor="contact-message" className="block text-sm font-semibold text-zinc-900 dark:text-white">
                 Message
               </label>
-              <textarea id="contact-message" name="message" rows={6} className="input-control focus-ring mt-2 px-4 py-3 text-sm" />
+              <textarea
+                id="contact-message"
+                name="message"
+                rows={6}
+                aria-describedby="contact-help"
+                className="input-control focus-ring mt-2 px-4 py-3 text-sm"
+              />
             </div>
-            <button className="btn-primary focus-ring px-5 py-3 text-sm font-semibold">Send message</button>
+            <button type="submit" className="btn-primary focus-ring px-5 py-3 text-sm font-semibold">
+              Send message
+            </button>
           </form>
         </section>
       </section>

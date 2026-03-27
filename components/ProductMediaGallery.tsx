@@ -59,6 +59,7 @@ export function ProductMediaGallery({ image, name }: { image?: string; name: str
             key={view.key}
             type="button"
             onClick={() => setActive(view)}
+            aria-pressed={active.key === view.key}
             className={`focus-ring rounded-2xl border px-4 py-3 text-left transition ${
               active.key === view.key
                 ? "border-[var(--brand-500)] bg-[color:color-mix(in_srgb,var(--brand-500)_10%,white)] text-[var(--brand-700)]"
