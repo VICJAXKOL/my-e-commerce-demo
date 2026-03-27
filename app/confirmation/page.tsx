@@ -96,8 +96,8 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
 
       <section className="surface-card overflow-hidden p-6 sm:p-8">
         <div className="rounded-[1.5rem] bg-[linear-gradient(135deg,var(--surface-invert),color-mix(in_srgb,var(--surface-invert)_72%,var(--brand-700)))] p-6 text-white shadow-[var(--shadow-card-hover)] sm:p-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="max-w-2xl">
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
+            <div className="min-w-0">
               <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${statusTone.badge}`}>
                 {statusTone.eyebrow}
               </span>
@@ -106,7 +106,7 @@ export default async function OrderConfirmationPage({ searchParams }: Props) {
               {payment?.reference ? <p className="mt-4 text-xs text-slate-300">Paystack reference: {payment.reference}</p> : null}
             </div>
 
-            <div className="w-full rounded-[1.25rem] bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur sm:w-auto sm:min-w-[14rem]">
+            <div className="w-full rounded-[1.25rem] bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">Order summary</p>
               <p className="mt-3 text-2xl font-semibold">{formattedTotal}</p>
               <p className="mt-1 text-sm text-slate-300">Estimated delivery in {eta} business days</p>
