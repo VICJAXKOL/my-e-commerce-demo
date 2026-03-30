@@ -155,13 +155,13 @@ export default function Home() {
         <section className="space-y-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Featured now</p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">Popular and fresh arrivals</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Featured now</p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white">Popular and fresh arrivals</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
                 A quick entry point into the catalog with products that feel current, relevant, and easy to shop.
               </p>
             </div>
-            <Link href="/products" className="btn-outline focus-ring w-fit px-4 py-2 text-sm font-semibold">
+            <Link href="/products" className="btn-outline focus-ring w-fit border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white hover:bg-white/[0.08]">
               View all products
             </Link>
           </div>

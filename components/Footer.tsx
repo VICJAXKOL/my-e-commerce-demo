@@ -2,7 +2,8 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-16 border-t border-[var(--border-subtle)] bg-[linear-gradient(180deg,#0f172a_0%,#020617_100%)] py-14 text-white">
+    <footer className="relative mt-16 overflow-hidden border-t border-white/10 bg-[linear-gradient(180deg,rgba(8,14,26,0.6)_0%,rgba(2,6,23,0.95)_100%)] py-14 text-white backdrop-blur-xl">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.14),transparent_68%)]" />
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid gap-10 border-b border-white/10 pb-10 lg:grid-cols-[1.2fr_repeat(3,1fr)]">
           <div className="max-w-sm">

@@ -37,8 +37,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
-        <Providers>{children}</Providers>
+      <body className="min-h-screen antialiased">
+        <Providers>
+          <div className="min-h-screen">{children}</div>
+        </Providers>
       </body>
     </html>
   );
