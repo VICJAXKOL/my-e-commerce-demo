@@ -1,13 +1,13 @@
-import { getProductById, products } from "../../../lib/products";
 import type { Metadata } from "next";
 import AddToCart from "../../../components/AddToCart";
 import { Breadcrumb } from "../../../components/Breadcrumb";
-import { RelatedProducts } from "../../../components/RelatedProducts";
-import { ProductReviews } from "../../../components/ProductReviews";
-import { ProductRating } from "../../../components/ProductRating";
 import { ProductMediaGallery } from "../../../components/ProductMediaGallery";
+import { ProductRating } from "../../../components/ProductRating";
+import { ProductReviews } from "../../../components/ProductReviews";
 import { RecentlyViewedRail } from "../../../components/RecentlyViewedRail";
+import { RelatedProducts } from "../../../components/RelatedProducts";
 import { formatNgn } from "../../../lib/currency";
+import { getProductById, products } from "../../../lib/products";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -54,7 +54,7 @@ export default async function ProductPage({ params }: Props) {
 
   if (!product) {
     return (
-      <div className="mx-auto max-w-4xl pt-20 text-center">
+      <div className="mx-auto max-w-4xl px-4 pt-20 text-center sm:px-6">
         <h1 className="text-2xl font-semibold">Product not found</h1>
         <p className="mt-2 text-zinc-600">The product you&apos;re looking for doesn&apos;t exist.</p>
       </div>
@@ -67,7 +67,7 @@ export default async function ProductPage({ params }: Props) {
   const etaEnd = new Date();
   etaEnd.setDate(etaEnd.getDate() + 5);
   const dateFormat = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" });
-  const etaWindow = `${dateFormat.format(etaStart)} – ${dateFormat.format(etaEnd)}`;
+  const etaWindow = `${dateFormat.format(etaStart)} - ${dateFormat.format(etaEnd)}`;
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -118,7 +118,7 @@ export default async function ProductPage({ params }: Props) {
   ];
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
+    <div className="mx-auto max-w-6xl space-y-8 px-4 pt-20 sm:px-6">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
 
       <div className="space-y-4">
@@ -159,9 +159,9 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           <div className="space-y-6 xl:sticky xl:top-24">
-            <section className="surface-card p-6 sm:p-8">
+            <section className="surface-spotlight p-6 text-white sm:p-8">
               <div className="flex flex-wrap gap-2">
-                <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-2)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-700 dark:text-white">
+                <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-200">
                   {product.category}
                 </span>
                 {product.badge && (
@@ -171,46 +171,42 @@ export default async function ProductPage({ params }: Props) {
                 )}
               </div>
 
-              <h1 className="mt-4 text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-white">
-                {product.name}
-              </h1>
+              <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{product.name}</h1>
 
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <ProductRating rating={product.rating} reviews={product.reviews} />
-                <div className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface-2)] px-4 py-2 text-sm font-medium text-zinc-700 dark:text-white">
+                <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200">
                   {product.reviews} verified reviews
                 </div>
               </div>
 
-              <div className="mt-6 flex flex-col gap-3 border-y border-[var(--border-subtle)] py-6 sm:flex-row sm:items-end sm:justify-between">
+              <div className="mt-6 flex flex-col gap-3 border-y border-white/10 py-6 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <p className="text-sm text-muted">Price</p>
-                  <p className="mt-2 text-4xl font-semibold tracking-tight text-zinc-900 dark:text-white">
-                    {formatNgn(product.price)}
-                  </p>
+                  <p className="text-sm text-slate-400">Price</p>
+                  <p className="mt-2 text-4xl font-semibold tracking-tight text-white">{formatNgn(product.price)}</p>
                 </div>
 
                 <div className="sm:text-right">
                   <div className="text-sm">
                     {inStock ? (
-                      <span className="rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-200">
+                      <span className="rounded-full bg-emerald-400/12 px-3 py-1 font-semibold text-emerald-100 ring-1 ring-emerald-300/20">
                         In stock ({product.stock} available)
                       </span>
                     ) : (
-                      <span className="rounded-full bg-rose-50 px-3 py-1 font-semibold text-rose-600 ring-1 ring-rose-200 dark:bg-rose-500/10 dark:text-rose-200">
+                      <span className="rounded-full bg-rose-400/12 px-3 py-1 font-semibold text-rose-100 ring-1 ring-rose-300/20">
                         Out of stock
                       </span>
                     )}
                   </div>
                   {inStock && product.stock <= 10 && (
-                    <p className="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-rose-600">
+                    <p className="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-rose-200">
                       Low stock: only {product.stock} left
                     </p>
                   )}
                 </div>
               </div>
 
-              <p className="mt-6 text-sm leading-7 text-muted sm:text-base">{product.description}</p>
+              <p className="mt-6 text-sm leading-7 text-slate-300 sm:text-base">{product.description}</p>
 
               <div className="mt-6">
                 <AddToCart product={product} />
@@ -218,10 +214,7 @@ export default async function ProductPage({ params }: Props) {
 
               <div className="mt-6 grid gap-3">
                 {purchasePromises.map((promise) => (
-                  <div
-                    key={promise}
-                    className="surface-soft flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 dark:text-slate-200"
-                  >
+                  <div key={promise} className="surface-spotlight-soft flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-200">
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--brand-500),var(--brand-600))] text-white">
                       ✓
                     </span>

@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React from "react";
-import { formatNgn } from "../../lib/currency";
 import { useCart } from "../../context/CartContext";
+import { formatNgn } from "../../lib/currency";
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
@@ -114,11 +114,11 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto max-w-4xl pt-20">
-        <section className="surface-card p-8 text-center sm:p-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Checkout</p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">Your cart is empty</h1>
-          <p className="mt-4 text-sm leading-7 text-muted sm:text-base">
+      <div className="mx-auto max-w-4xl px-4 pt-20 sm:px-6">
+        <section className="surface-spotlight p-8 text-center text-white sm:p-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">Checkout</p>
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">Your cart is empty</h1>
+          <p className="mt-4 text-sm leading-7 text-slate-300 sm:text-base">
             Add products before checkout so we can calculate shipping, discounts, and your secure payment summary.
           </p>
           <Link href="/products" className="btn-primary focus-ring mt-6 inline-flex px-5 py-3 text-sm font-semibold">
@@ -131,33 +131,33 @@ export default function CheckoutPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 pt-20 sm:px-6">
-      <section className="surface-card overflow-hidden p-6 sm:p-8">
+      <section className="surface-spotlight p-6 text-white sm:p-8">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Secure checkout</p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-white">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">Secure checkout</p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
               Enter your details and pay with confidence
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted sm:text-base">
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
               We&apos;ve grouped the information you need so checkout feels easier to complete and easier to trust.
             </p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="surface-soft p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Step 1</p>
-              <p className="mt-2 text-sm font-semibold text-zinc-900 dark:text-white">Cart reviewed</p>
-              <p className="mt-2 text-sm leading-6 text-muted">Products and totals are already confirmed.</p>
+            <div className="surface-spotlight-soft p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Step 1</p>
+              <p className="mt-2 text-sm font-semibold text-white">Cart reviewed</p>
+              <p className="mt-2 text-sm leading-6 text-slate-300">Products and totals are already confirmed.</p>
             </div>
-            <div className="surface-soft border border-[var(--brand-500)] bg-[color:color-mix(in_srgb,var(--brand-500)_10%,white)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-700)]">Step 2</p>
-              <p className="mt-2 text-sm font-semibold text-zinc-900 dark:text-white">Shipping & payment</p>
-              <p className="mt-2 text-sm leading-6 text-muted">Enter your contact details and confirm delivery options.</p>
+            <div className="surface-spotlight-soft border border-sky-400/40 bg-sky-400/10 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">Step 2</p>
+              <p className="mt-2 text-sm font-semibold text-white">Shipping &amp; payment</p>
+              <p className="mt-2 text-sm leading-6 text-slate-200">Enter your contact details and confirm delivery options.</p>
             </div>
-            <div className="surface-soft p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Step 3</p>
-              <p className="mt-2 text-sm font-semibold text-zinc-900 dark:text-white">Confirmation</p>
-              <p className="mt-2 text-sm leading-6 text-muted">You’ll finish payment securely with Paystack.</p>
+            <div className="surface-spotlight-soft p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Step 3</p>
+              <p className="mt-2 text-sm font-semibold text-white">Confirmation</p>
+              <p className="mt-2 text-sm leading-6 text-slate-300">You&apos;ll finish payment securely with Paystack.</p>
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@ export default function CheckoutPage() {
         <section
           role="status"
           aria-live="polite"
-          className="rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-800"
+          className="rounded-2xl border border-amber-400/30 bg-amber-400/10 px-5 py-4 text-sm text-amber-100 backdrop-blur-sm"
         >
           Payment was canceled. Your cart is still available, so you can review the summary below and try again when you&apos;re ready.
         </section>
@@ -177,7 +177,7 @@ export default function CheckoutPage() {
         <section
           role="alert"
           aria-live="assertive"
-          className="rounded-2xl border border-rose-300 bg-rose-50 px-5 py-4 text-sm text-rose-700"
+          className="rounded-2xl border border-rose-400/30 bg-rose-400/10 px-5 py-4 text-sm text-rose-100 backdrop-blur-sm"
         >
           {paymentError}
         </section>
@@ -191,7 +191,7 @@ export default function CheckoutPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Section 1</p>
                 <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">Contact information</h2>
               </div>
-              <p className="text-sm text-muted">We’ll use this for updates and delivery coordination.</p>
+              <p className="text-sm text-muted">We&apos;ll use this for updates and delivery coordination.</p>
             </div>
 
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -315,7 +315,7 @@ export default function CheckoutPage() {
                 }`}
               >
                 <p className="text-sm font-semibold text-zinc-900 dark:text-white">Standard delivery</p>
-                <p className="mt-2 text-sm text-muted">3–5 business days · {subtotal >= 50000 ? "Free" : formatNgn(3500)}</p>
+                <p className="mt-2 text-sm text-muted">3-5 business days | {subtotal >= 50000 ? "Free" : formatNgn(3500)}</p>
               </button>
 
               <button
@@ -329,12 +329,12 @@ export default function CheckoutPage() {
                 }`}
               >
                 <p className="text-sm font-semibold text-zinc-900 dark:text-white">Express delivery</p>
-                <p className="mt-2 text-sm text-muted">2–3 business days · {formatNgn(8000)}</p>
+                <p className="mt-2 text-sm text-muted">2-3 business days | {formatNgn(8000)}</p>
               </button>
             </div>
 
             <div className="surface-soft mt-5 p-4 text-sm leading-6 text-zinc-700 dark:text-slate-200">
-              You’ll be redirected to a secure Paystack-hosted payment page after review. Your cart stays available if payment is canceled.
+              You&apos;ll be redirected to a secure Paystack-hosted payment page after review. Your cart stays available if payment is canceled.
             </div>
           </div>
         </div>
@@ -342,7 +342,7 @@ export default function CheckoutPage() {
         <aside className="space-y-4 xl:sticky xl:top-24">
           <section id="payment-summary" className="surface-card p-6 sm:p-7">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">Order summary</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">What you’re paying today</h2>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">What you&apos;re paying today</h2>
 
             <div className="mt-5 max-h-52 space-y-3 overflow-auto pr-1">
               {items.map((item) => (

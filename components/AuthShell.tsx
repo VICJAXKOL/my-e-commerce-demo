@@ -35,33 +35,33 @@ export function AuthShell({
   children,
 }: AuthShellProps) {
   return (
-    <div className="mx-auto grid max-w-6xl gap-6 pt-20 xl:grid-cols-[0.9fr_1.1fr]">
-      <section className="surface-card order-2 p-6 sm:p-8 xl:order-1 xl:p-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-600)]">{eyebrow}</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-white">
+    <div className="mx-auto grid max-w-6xl gap-6 px-4 pt-20 sm:px-6 xl:grid-cols-[0.9fr_1.1fr]">
+      <section className="surface-spotlight order-2 p-6 text-white sm:p-8 xl:order-1 xl:p-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">{eyebrow}</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
           {title}
         </h1>
-        <p className="mt-4 max-w-xl text-sm leading-7 text-muted sm:text-base">{description}</p>
+        <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300 sm:text-base">{description}</p>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-3 xl:grid-cols-1">
-          <div className="surface-soft p-4">
-            <p className="text-sm font-semibold text-zinc-900 dark:text-white">Faster account access</p>
-            <p className="mt-2 text-sm leading-6 text-muted">Sign in, register, or recover access without guessing what happens next.</p>
+          <div className="surface-spotlight-soft p-4">
+            <p className="text-sm font-semibold text-white">Faster account access</p>
+            <p className="mt-2 text-sm leading-6 text-slate-300">Sign in, register, or recover access without guessing what happens next.</p>
           </div>
-          <div className="surface-soft p-4">
-            <p className="text-sm font-semibold text-zinc-900 dark:text-white">Clear status messaging</p>
-            <p className="mt-2 text-sm leading-6 text-muted">Verification, reset, and success states stay visible and easier to trust.</p>
+          <div className="surface-spotlight-soft p-4">
+            <p className="text-sm font-semibold text-white">Clear status messaging</p>
+            <p className="mt-2 text-sm leading-6 text-slate-300">Verification, reset, and success states stay visible and easier to trust.</p>
           </div>
-          <div className="surface-soft p-4">
-            <p className="text-sm font-semibold text-zinc-900 dark:text-white">Shopping continuity</p>
-            <p className="mt-2 text-sm leading-6 text-muted">Your auth flow still connects smoothly back into products, cart, and account.</p>
+          <div className="surface-spotlight-soft p-4">
+            <p className="text-sm font-semibold text-white">Shopping continuity</p>
+            <p className="mt-2 text-sm leading-6 text-slate-300">Your auth flow still connects smoothly back into products, cart, and account.</p>
           </div>
         </div>
 
-        <div className="mt-8 rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--surface-2)] p-4">
-          <p className="text-sm text-muted">
+        <div className="mt-8 rounded-[var(--radius-md)] border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+          <p className="text-sm text-slate-300">
             {supportLabel}{" "}
-            <Link href={supportHref} className="font-semibold text-[var(--brand-600)] hover:text-[var(--brand-700)]">
+            <Link href={supportHref} className="font-semibold text-sky-200 hover:text-white">
               {supportText}
             </Link>
           </p>
