@@ -29,7 +29,7 @@ export default function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="surface-card group relative flex min-h-[28rem] flex-col overflow-hidden p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]">
+    <div className="surface-card group relative flex min-h-[25.5rem] flex-col overflow-hidden p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)] sm:p-5">
       <ProductBadge badge={product.badge} />
 
       {product.image && (
@@ -38,7 +38,7 @@ export default function ProductCard({ product }: { product: Product }) {
           prefetch={false}
           onMouseEnter={shouldPrefetch ? () => router.prefetch(detailsHref) : undefined}
           onFocus={shouldPrefetch ? () => router.prefetch(detailsHref) : undefined}
-          className="surface-soft relative z-0 block h-52 w-full flex-shrink-0 overflow-hidden rounded-2xl"
+          className="surface-soft relative z-0 block h-44 w-full flex-shrink-0 overflow-hidden rounded-2xl sm:h-48"
         >
           <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-950/14 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
           <Image
@@ -51,10 +51,10 @@ export default function ProductCard({ product }: { product: Product }) {
         </Link>
       )}
 
-      <div className="mt-5 flex items-start justify-between gap-3">
+      <div className="mt-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">{product.category}</p>
-          <h3 className="mt-2 line-clamp-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">
+          <h3 className="mt-1.5 line-clamp-2 text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">
             {product.name}
           </h3>
         </div>
@@ -72,17 +72,17 @@ export default function ProductCard({ product }: { product: Product }) {
         </button>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-2.5">
         <ProductRating rating={product.rating} reviews={product.reviews} />
       </div>
 
-      <p className="mt-4 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+      <p className="mt-3 text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
         {formatNgn(product.price)}
       </p>
 
-      <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted">{product.description}</p>
+      <p className="mt-2.5 line-clamp-2 text-sm leading-6 text-muted">{product.description}</p>
 
-      <div className="mt-4 flex items-center gap-2 text-xs">
+      <div className="mt-3.5 flex items-center gap-2 text-xs">
         {inStock ? (
           <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-200">
             In stock ({product.stock})
@@ -99,7 +99,7 @@ export default function ProductCard({ product }: { product: Product }) {
         )}
       </div>
 
-      <div className="mt-auto grid grid-cols-2 gap-2 pt-5">
+      <div className="mt-auto grid grid-cols-2 gap-2 pt-4">
         <Link
           href={detailsHref}
           prefetch={false}
